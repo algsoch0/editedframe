@@ -1233,7 +1233,7 @@
     .service-list{
       display:flex;
       flex-direction:column;
-      gap:5px;
+      gap:10px;
       margin-bottom:24px;
       position:relative;
       z-index:1;
@@ -3154,7 +3154,7 @@ footer::before{
   }
   
   .service-list {
-    gap: 0px;
+    gap: 4px;
     margin-bottom: 16px;
   }
   
@@ -3525,7 +3525,7 @@ footer::before{
   }
   
   .service-list {
-    gap: 2px;
+    gap: 3px;
     margin-bottom: 14px;
   }
   
@@ -3896,7 +3896,7 @@ footer::before{
   }
   
   .service-list {
-    gap: 2px;
+    gap: 3px;
     margin-bottom: 12px;
   }
   
