@@ -455,40 +455,8 @@ https://res.cloudinary.com/dsuvhebce/video/upload/v1759265433/motion_graphic_3_y
   <!-- Configuration -->
   <script src="js/config.js"></script>
   
-  <!-- Firebase Configuration -->
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
-    import { getDatabase, ref, push, onValue, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
-
-    // Security check - only allow on approved domains
-    const currentDomain = window.location.hostname;
-    if (!window.CONFIG.allowedDomains.includes(currentDomain)) {
-      console.error('Unauthorized domain access');
-      // Still initialize but with limited functionality
-    }
-
-    // Get Firebase configuration from external config
-    const firebaseConfig = window.CONFIG.firebase;
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const database = getDatabase(app);
-
-    // Make Firebase available globally for the review system
-    window.firebaseApp = app;
-    window.firebaseDb = database;
-    window.firebaseRef = ref;
-    window.firebasePush = push;
-    window.firebaseOnValue = onValue;
-    window.firebaseQuery = query;
-    window.firebaseOrderByChild = orderByChild;
-    window.firebaseLimitToLast = limitToLast;
-  </script>
-  
-  <script src="js/reviews.js"></script>
+  <!-- Local Storage Review System (No Firebase needed!) -->
+  <script src="js/reviews-localstorage.js"></script>
   
   <script>
     // Additional performance optimization
@@ -502,10 +470,33 @@ https://res.cloudinary.com/dsuvhebce/video/upload/v1759265433/motion_graphic_3_y
         }, 500);
       }
       
-      // Initialize review system after page load
-      if (window.reviewSystem) {
-        reviewSystem.init();
-      }
+      // Wait for reviewSystem to be fully initialized
+      setTimeout(() => {
+        if (window.reviewSystem) {
+          console.log('✅ Local Storage Review System Active');
+          console.log('📊 Total Reviews:', reviewSystem.getAllReviews().length);
+          
+          // Admin helper functions (for you to manage reviews in browser console)
+          window.adminReviews = {
+            viewAll: () => reviewSystem.getAllReviews(),
+            approve: (id) => reviewSystem.approveReview(id),
+            reject: (id) => reviewSystem.rejectReview(id),
+            export: () => reviewSystem.exportToJSON(),
+            stats: () => {
+              const reviews = reviewSystem.getAllReviews();
+              console.log('📈 Review Statistics:');
+              console.log('Total:', reviews.length);
+              console.log('Approved:', reviews.filter(r => r.status === 'approved').length);
+              console.log('Pending:', reviews.filter(r => r.status === 'pending').length);
+              console.log('Rejected:', reviews.filter(r => r.status === 'rejected').length);
+            }
+          };
+          
+          console.log('🔧 Admin Tools: Use adminReviews.viewAll(), adminReviews.approve("id"), etc.');
+        } else {
+          console.error('❌ Review system not initialized');
+        }
+      }, 100);
     });
   </script>
 </body>

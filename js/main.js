@@ -561,8 +561,25 @@ class VideoPortfolio {
     }
 
     async sendToDiscord(name, email, budget, message) {
-        // Your actual Discord webhook URL
-        const webhookURL = 'https://discord.com/api/webhooks/1407102230620016660/PktP90bwhlLKelQ5wwScuke9qmYjuKoVLjxFAVcR0dBGheqdUyXmTXwBazVB70GVtffL';
+        // Load Discord webhook from secure configuration
+        let webhookURL = null;
+        
+        try {
+            const config = await fetch('./config.json');
+            if (config.ok) {
+                const configData = await config.json();
+                if (configData.discord && configData.discord.webhook) {
+                    // Decode the base64 encoded webhook
+                    webhookURL = atob(configData.discord.webhook);
+                }
+            }
+        } catch (error) {
+            console.log('Config not available, Discord notifications disabled');
+        }
+        
+        if (!webhookURL) {
+            throw new Error('Discord webhook not configured');
+        }
         
         const embed = {
             title: "🎬 New Project Inquiry - edited.frame",
@@ -597,6 +614,19 @@ class VideoPortfolio {
             }
             
             console.log('Discord notification sent successfully');
+            
+            // Show success message when Discord webhook succeeds
+            const msgElement = document.getElementById('formMsg');
+            if (msgElement) {
+                msgElement.innerHTML = '<span style="color: #4ade80;">✅ Message sent successfully via Discord! I\'ll get back to you within 24 hours.</span>';
+            }
+            
+            // Reset form after successful submission
+            const form = document.getElementById('contactForm');
+            if (form) {
+                form.reset();
+            }
+            
             return true;
         } catch (error) {
             console.log('Discord notification failed:', error.message);
