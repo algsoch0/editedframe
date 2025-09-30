@@ -351,6 +351,23 @@ class VideoPortfolio {
     }
 
     filterGrid(type) {
+        // Update active filter button
+        const filterButtons = document.querySelectorAll('.filter');
+        filterButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+        
+        // Find and activate the clicked button
+        const activeButton = Array.from(filterButtons).find(button => {
+            const onclick = button.getAttribute('onclick');
+            return onclick && onclick.includes(`'${type}'`);
+        });
+        
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
+        
+        // Filter the video cards
         const cards = this.workGrid.querySelectorAll('.card');
         cards.forEach(card => {
             if (type === 'all' || card.dataset.type === type) {
