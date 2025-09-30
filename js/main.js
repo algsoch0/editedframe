@@ -33,6 +33,21 @@ class VideoPortfolio {
     }
 
     loadVideos() {
+        // Cloudinary URL mapping - easily add new videos by adding their Cloudinary URL here
+        this.cloudinaryUrls = {
+            'trading (1).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265474/trading_1_yvgel4.mp4',
+            'trading (2).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265498/trading_2_dzhim0.mp4',
+            'trading (3).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265454/trading_3_qqffrq.mp4',
+            'trading (4).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265483/trading_4_szfegp.mp4',
+            'tradind 5.mp4': 'assets/tradind 5.mp4', // Fallback to local if not uploaded yet
+            'educational.mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265286/educational_riaukp.mp4',
+            'educational (2).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265238/educational_2_b0eiey.mp4',
+            'motion graphic (1).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265366/motion_graphic_1_cwknb2.mp4',
+            'motion graphic (2).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265422/motion_graphic_2_uz78wz.mp4',
+            'motion graphic (3).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265433/motion_graphic_3_yyotbn.mp4',
+            'sub vdo.mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265448/sub_vdo_qr7agc.mp4'
+        };
+
         this.videos = [
             { filename: 'trading (1).mp4', title: 'Candlestick Pattern', category: 'trading-reel', type: 'Trading Reel' },
             { filename: 'trading (2).mp4', title: 'Support and Resistance', category: 'trading-reel', type: 'Trading Reel' },
@@ -64,7 +79,8 @@ class VideoPortfolio {
         card.className = 'card';
         card.dataset.type = video.category;
         
-        const videoUrl = `assets/${video.filename}`;
+        // Use Cloudinary URL if available, fallback to assets folder
+        const videoUrl = this.cloudinaryUrls[video.filename] || `assets/${video.filename}`;
         
         card.innerHTML = `
             <div class="thumb">
