@@ -157,6 +157,13 @@
       transition:transform 0.3s ease;
       position:relative;
     }
+    
+    .brand-text {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+    }
     header .brand::before{
       content:'';
       position:absolute;
@@ -269,6 +276,7 @@
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       background-clip:text;
+      text-align:center;
     }
     
     /* Enhanced Tagline with Box Design */
@@ -284,10 +292,12 @@
       border-radius:20px;
       display:inline-flex;
       align-items:center;
+      justify-content:center;
       gap:8px;
       margin-top:8px;
       box-shadow:0 4px 15px rgba(123,47,242,0.3);
       overflow:hidden;
+      text-align:center;
       animation:taglineGlow 3s ease-in-out infinite;
     }
     
@@ -622,7 +632,7 @@
     .hero{
       display:grid;
       grid-template-columns:1.2fr 0.8fr;
-      gap:40px;
+      gap:20px;
       align-items:center;
       padding:60px 0;
       max-width:1200px;
@@ -981,11 +991,12 @@
     }
     .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
       gap:32px;
       max-width:1200px;
       margin:0 auto;
       padding:24px;
+      justify-items:center;
     }
     .card{
       background:var(--panel);
@@ -1013,6 +1024,7 @@
     .thumb{
       width:100%;
       aspect-ratio:9/16; /* 9:16 aspect ratio for all devices */
+      max-width:320px; /* Prevent oversized videos on desktop */
       background:var(--glass);
       display:flex;
       align-items:center;
@@ -1127,9 +1139,8 @@
     .services-container{
       display:grid;
       grid-template-columns:1fr 1.2fr;
-      gap:50px;
+      gap:32px;
       max-width:1200px;
-      color: #222;
       margin:0 auto;
       position:relative;
     }
@@ -1137,18 +1148,20 @@
     .service-category,
     .workflow-section{
       background:linear-gradient(135deg, 
-        rgba(123,47,242,0.1) 0%, 
-        rgba(123,47,242,0.05) 100%);
+        rgba(123,47,242,0.12) 0%, 
+        rgba(243,87,168,0.08) 50%,
+        rgba(123,47,242,0.06) 100%);
       -webkit-backdrop-filter:blur(20px);
       backdrop-filter:blur(20px);
-      padding:40px;
-      border-radius:24px;
-      border:1px solid rgba(123,47,242,0.2);
-      box-shadow:0 20px 60px rgba(123,47,242,0.1);
+      padding:28px;
+      border-radius:20px;
+      border:2px solid rgba(123,47,242,0.25);
+      box-shadow:0 15px 40px rgba(123,47,242,0.15), 
+                 0 5px 15px rgba(243,87,168,0.1);
       transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position:relative;
       overflow:hidden;
-      color: #790000;
+      color: #2c2c2c;
     }
     
     .service-category::before,
@@ -1160,10 +1173,10 @@
       width:100%;
       height:100%;
       background:linear-gradient(135deg,
-        rgba(123,47,242,0.1) 0%,
-        rgba(255,107,107,0.1) 50%,
-        rgba(123,47,242,0.1) 100%);
-      transition:left 0.8s ease;
+        rgba(123,47,242,0.15) 0%,
+        rgba(243,87,168,0.12) 50%,
+        rgba(123,47,242,0.08) 100%);
+      transition:left 0.6s ease;
       z-index:0;
     }
     
@@ -1174,9 +1187,10 @@
     
     .service-category:hover,
     .workflow-section:hover{
-      transform:translateY(-8px) scale(1.02);
-      box-shadow:0 30px 80px rgba(123,47,242,0.2);
-      border-color:rgb(195, 8, 8);
+      transform:translateY(-6px) scale(1.01);
+      box-shadow:0 25px 60px rgba(123,47,242,0.25), 
+                 0 10px 25px rgba(243,87,168,0.15);
+      border-color:rgba(123,47,242,0.4);
     }
     
     .service-header,
@@ -1219,7 +1233,7 @@
     .service-list{
       display:flex;
       flex-direction:column;
-      gap:16px;
+      gap:5px;
       margin-bottom:24px;
       position:relative;
       z-index:1;
@@ -1354,6 +1368,8 @@
       border-radius:16px;
       overflow:hidden;
       aspect-ratio:9/16;
+      max-width:200px; /* Prevent oversized showcase videos */
+      width:100%;
       cursor:pointer;
       transition:all 0.4s ease;
     }
@@ -1475,23 +1491,27 @@
       display:flex;
       align-items:flex-start;
       gap:12px;
-      background:rgb(225, 20, 129);
+      background:linear-gradient(135deg, 
+        rgba(243,87,168,0.15) 0%, 
+        rgba(123,47,242,0.08) 100%);
       -webkit-backdrop-filter:blur(10px);
       backdrop-filter:blur(10px);
-      padding:20px;
-      border-radius:16px;
-      margin-top:20px;
-      border:1px solid rgb(199, 185, 185);
+      padding:16px;
+      border-radius:14px;
+      margin-top:16px;
+      border:1px solid rgba(243,87,168,0.25);
       position:relative;
       z-index:1;
-      color:#d00b0b;
+      color:#444;
       transition:all 0.3s ease;
     }
     
     .service-note:hover{
-      background:rgba(232, 5, 153, 0.956);
-      border-color:rgb(212, 50, 31);
-      color:#d00b0b;
+      background:linear-gradient(135deg, 
+        rgba(243,87,168,0.2) 0%, 
+        rgba(123,47,242,0.12) 100%);
+      border-color:rgba(243,87,168,0.4);
+      transform:translateY(-2px);
     }
     
     .note-icon{
@@ -2506,6 +2526,65 @@
       }
     }
 
+    /* Fix navigation and tagline spacing for medium screens 1028-1400px */
+    @media (min-width: 1025px) and (max-width: 1400px) {
+      header {
+        padding: 18px 15px;
+        margin-bottom: 24px;
+      }
+      nav {
+        gap: 16px;
+        padding: 6px 18px 6px 38px;
+        margin-left: 8px;
+      }
+      .brand-text h1 {
+        font-size: 20px;
+        margin-bottom: 4px;
+      }
+      .tagline {
+        font-size: 11px;
+        padding: 6px 14px;
+        margin-top: 6px;
+      }
+      .nav-link {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+      .nav-cta {
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+    }
+
+    /* Fix navigation overlap at specific width range 769-773px */
+    @media (max-width: 773px) and (min-width: 769px) {
+      nav {
+        gap: 12px;
+        padding: 6px 16px 6px 35px;
+        font-size: 13px;
+      }
+      .nav-text {
+        display: none;
+      }
+      .nav-icon {
+        font-size: 16px;
+      }
+      .nav-cta {
+        padding: 6px 12px;
+        font-size: 12px;
+        min-width: 70px;
+      }
+      .cta-text {
+        display: none;
+      }
+      .brand-text h1 {
+        font-size: 18px;
+      }
+      .tagline {
+        font-size: 11px;
+      }
+    }
+
     @media(max-width:768px){
       .container{
         padding:20px;
@@ -3060,18 +3139,57 @@ footer::before{
   
   /* Services section */
   .services-container {
+    display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
+    padding: 0 8px;
   }
   
   .service-category,
   .workflow-section {
     width: 100%;
+    padding: 20px 16px;
+    margin: 0;
+    border-radius: 16px;
+  }
+  
+  .service-list {
+    gap: 0px;
+    margin-bottom: 16px;
+  }
+  
+  .service-item {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  
+  .service-video-showcase {
+    margin-top: 12px;
+    padding: 16px;
+    border-radius: 12px;
   }
   
   .showcase-videos {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .showcase-video-item {
+    margin-bottom: 8px;
+  }
+  
+  .service-note {
+    padding: 12px;
+    margin-top: 12px;
+    gap: 8px;
+  }
+  
+  .workflow-steps {
     gap: 12px;
+  }
+  
+  .workflow-step {
+    padding: 12px;
   }
   
   /* Workflow steps */
@@ -3366,6 +3484,140 @@ footer::before{
   .separator {
     display: none;
   }
+  
+  /* Enhanced Services Section Mobile Improvements */
+  .services-container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 0 6px;
+    max-width: 100%;
+  }
+  
+  .service-category,
+  .workflow-section {
+    padding: 18px 14px;
+    margin: 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, 
+      rgba(123,47,242,0.1) 0%, 
+      rgba(243,87,168,0.06) 50%,
+      rgba(123,47,242,0.04) 100%);
+    border: 1.5px solid rgba(123,47,242,0.2);
+    box-shadow: 0 10px 25px rgba(123,47,242,0.12), 
+                0 3px 10px rgba(243,87,168,0.08);
+  }
+  
+  .service-header,
+  .workflow-header {
+    margin-bottom: 16px;
+    gap: 8px;
+  }
+  
+  .service-icon,
+  .workflow-icon {
+    font-size: 24px;
+  }
+  
+  .service-header h4,
+  .workflow-header h4 {
+    font-size: 1.1rem;
+  }
+  
+  .service-list {
+    gap: 2px;
+    margin-bottom: 14px;
+  }
+  
+  .service-item {
+    padding: 10px 12px;
+    gap: 8px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid rgba(123,47,242,0.15);
+  }
+  
+  .service-item span:last-child {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  
+  .service-video-showcase {
+    margin-top: 10px;
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+  }
+  
+  .showcase-header {
+    margin-bottom: 12px;
+    gap: 6px;
+  }
+  
+  .showcase-title {
+    font-size: 0.95rem;
+  }
+  
+  .showcase-videos {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .showcase-video-item {
+    margin-bottom: 6px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .showcase-play-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 12px;
+  }
+  
+  .showcase-video-title {
+    font-size: 0.8rem;
+    padding: 10px 8px 6px;
+  }
+  
+  .service-note {
+    padding: 10px 12px;
+    margin-top: 10px;
+    gap: 8px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, 
+      rgba(243,87,168,0.12) 0%, 
+      rgba(123,47,242,0.06) 100%);
+  }
+  
+  .service-note span:last-child {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  
+  .workflow-steps {
+    gap: 10px;
+  }
+  
+  .workflow-step {
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+  
+  .step-number {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+  
+  .step-title {
+    font-size: 0.9rem;
+  }
+  
+  .step-desc {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
 }
 
 /* Extra small mobile devices */
@@ -3589,20 +3841,21 @@ footer::before{
   }
   
   nav {
-    gap: 4px;
-    padding: 6px 8px;
+    gap: 3px;
+    padding: 5px 6px;
   }
   
   .nav-link {
-    padding: 6px 8px;
-    font-size: 0.65rem;
-    min-width: 50px;
+    padding: 5px 6px;
+    font-size: 0.6rem;
+    min-width: 42px;
   }
   
   .nav-cta {
-    padding: 6px 12px;
-    font-size: 0.65rem;
-    min-width: 70px;
+    padding: 5px 8px;
+    font-size: 0.6rem;
+    min-width: 55px;
+    gap: 4px;
   }
   
   .btn {
@@ -3613,6 +3866,255 @@ footer::before{
   
   .hero-left h2 {
     font-size: 1.5rem;
+  }
+  
+  /* Services section - extra small mobile optimizations */
+  .services-container {
+    gap: 14px;
+    padding: 0 4px;
+  }
+  
+  .service-category,
+  .workflow-section {
+    padding: 14px 12px;
+    border-radius: 14px;
+  }
+  
+  .service-header,
+  .workflow-header {
+    margin-bottom: 12px;
+  }
+  
+  .service-icon,
+  .workflow-icon {
+    font-size: 20px;
+  }
+  
+  .service-header h4,
+  .workflow-header h4 {
+    font-size: 1rem;
+  }
+  
+  .service-list {
+    gap: 2px;
+    margin-bottom: 12px;
+  }
+  
+  .service-item {
+    padding: 8px 10px;
+    gap: 6px;
+    border-radius: 10px;
+  }
+  
+  .service-item span:last-child {
+    font-size: 0.85rem;
+  }
+  
+  .service-video-showcase {
+    margin-top: 8px;
+    padding: 12px;
+    border-radius: 10px;
+  }
+  
+  .showcase-header {
+    margin-bottom: 10px;
+  }
+  
+  .showcase-title {
+    font-size: 0.9rem;
+  }
+  
+  .showcase-videos {
+    gap: 6px;
+  }
+  
+  .showcase-video-item {
+    margin-bottom: 4px;
+  }
+  
+  .showcase-play-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 10px;
+  }
+  
+  .showcase-video-title {
+    font-size: 0.75rem;
+    padding: 8px 6px 4px;
+  }
+  
+  .service-note {
+    padding: 8px 10px;
+    margin-top: 8px;
+    gap: 6px;
+  }
+  
+  .service-note span:last-child {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  
+  .workflow-steps {
+    gap: 8px;
+  }
+  
+  .workflow-step {
+    padding: 8px 10px;
+  }
+  
+  .step-number {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+  }
+  
+  .step-title {
+    font-size: 0.85rem;
+  }
+  
+  .step-desc {
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+}
+
+/* Very small mobile devices - 390px and smaller */
+@media (max-width: 390px) {
+  nav {
+    gap: 2px;
+    padding: 4px 5px;
+    width: calc(100% - 12px);
+  }
+  
+  .nav-link {
+    padding: 4px 5px;
+    font-size: 0.55rem;
+    min-width: 38px;
+    gap: 1px;
+  }
+  
+  .nav-icon {
+    font-size: 12px;
+  }
+  
+  .nav-text {
+    font-size: 0.5rem;
+  }
+  
+  .nav-cta {
+    padding: 4px 6px;
+    font-size: 0.55rem;
+    min-width: 48px;
+    gap: 2px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .cta-text {
+    display: none; /* Hide text, show only icon on very small screens */
+  }
+  
+  .cta-icon {
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  /* Alternative: Show abbreviated text */
+  .nav-cta::after {
+    content: "Quote";
+    font-size: 0.55rem;
+    font-weight: 600;
+  }
+}
+
+/* Ultra small mobile devices - 320px and smaller */
+@media (max-width: 320px) {
+  nav {
+    gap: 1px;
+    padding: 3px 4px;
+  }
+  
+  .nav-link {
+    padding: 3px 4px;
+    font-size: 0.5rem;
+    min-width: 32px;
+  }
+  
+  .nav-icon {
+    font-size: 11px;
+  }
+  
+  .nav-text {
+    font-size: 0.45rem;
+  }
+  
+  .nav-cta {
+    padding: 3px 5px;
+    min-width: 40px;
+    font-size: 0.5rem;
+  }
+  
+  .nav-cta::after {
+    content: "Q";
+    font-size: 0.5rem;
+  }
+}
+
+/* Desktop video size control - prevent oversized videos */
+@media (min-width: 1025px) {
+  .card {
+    max-width: 350px;
+    width: 100%;
+  }
+  
+  .thumb {
+    max-width: 100%;
+    aspect-ratio: 9/16;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 350px));
+    justify-content: center;
+  }
+  
+  .showcase-video-item {
+    max-width: 180px;
+    width: 100%;
+  }
+  
+  .showcase-videos {
+    justify-items: center;
+  }
+}
+
+/* Desktop video size control - prevent oversized videos */
+@media (min-width: 1025px) {
+  .card {
+    max-width: 350px;
+    width: 100%;
+  }
+  
+  .thumb {
+    max-width: 100%;
+    aspect-ratio: 9/16;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 350px));
+    justify-content: center;
+  }
+  
+  .showcase-video-item {
+    max-width: 180px;
+    width: 100%;
+  }
+  
+  .showcase-videos {
+    justify-items: center;
+    max-width: 380px;
+    margin: 0 auto;
   }
 }
 
