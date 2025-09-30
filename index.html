@@ -102,7 +102,9 @@
       <aside class="hero-right">
         <div class="hero-video-container">
           <video class="hero-video" autoplay muted loop playsinline preload="auto" data-autoplay="true">
-            <source src="assets/motion graphic (3).mp4" type="video/mp4">
+            <source src="
+https://res.cloudinary.com/dsuvhebce/video/upload/v1759265433/motion_graphic_3_yyotbn.mp4
+" type="video/mp4">
             <img src="assets/logo.jpg" alt="hero">
           </video>
           <div class="video-overlay">
@@ -152,108 +154,20 @@
               <span class="bullet">•</span>
               <span>YouTube Shorts</span>
             </div>
-            <div class="service-video-showcase" id="youtube-showcase">
-              <div class="showcase-header">
-                <span class="showcase-icon">🎬</span>
-                <h4 class="showcase-title">YouTube Shorts Portfolio</h4>
-              </div>
-              <div class="showcase-videos">
-                <div class="showcase-video-item">
-                  <video class="showcase-video" muted>
-                    <source src="assets/trading (1).mp4" type="video/mp4">
-                  </video>
-                  <div class="showcase-play-btn">▶</div>
-                  <div class="showcase-video-title">Trading Analysis Short</div>
-                </div>
-                <div class="showcase-video-item">
-                  <video class="showcase-video" muted>
-                    <source src="assets/educational.mp4" type="video/mp4">
-                  </video>
-                  <div class="showcase-play-btn">▶</div>
-                  <div class="showcase-video-title">Educational Content</div>
-                </div>
-              </div>
-            </div>
             
             <div class="service-item" data-service="instagram">
               <span class="bullet">•</span>
               <span>Instagram Reels</span>
-            </div>
-            <div class="service-video-showcase" id="instagram-showcase">
-              <div class="showcase-header">
-                <span class="showcase-icon">📱</span>
-                <h4 class="showcase-title">Instagram Reels Collection</h4>
-              </div>
-              <div class="showcase-videos">
-                <div class="showcase-video-item">
-                  <video class="showcase-video" muted>
-                    <source src="assets/motion graphic (1).mp4" type="video/mp4">
-                  </video>
-                  <div class="showcase-play-btn">▶</div>
-                  <div class="showcase-video-title">Motion Graphics Reel</div>
-                </div>
-                <div class="showcase-video-item">
-                  <video class="showcase-video" muted>
-                    <source src="assets/trading (2).mp4" type="video/mp4">
-                  </video>
-                  <div class="showcase-play-btn">▶</div>
-                  <div class="showcase-video-title">Trading Insights</div>
-                </div>
-              </div>
             </div>
             
             <div class="service-item" data-service="realestate">
               <span class="bullet">•</span>
               <span>Real Estate Videos</span>
             </div>
-            <div class="service-video-showcase" id="realestate-showcase">
-              <div class="showcase-header">
-                <span class="showcase-icon">🏡</span>
-                <h4 class="showcase-title">Real Estate Video Portfolio</h4>
-              </div>
-              <div class="showcase-videos">
-                <div class="showcase-video-item">
-                  <video class="showcase-video" muted>
-                    <source src="assets/motion graphic (2).mp4" type="video/mp4">
-                  </video>
-                  <div class="showcase-play-btn">▶</div>
-                  <div class="showcase-video-title">Property Showcase</div>
-                </div>
-                <div class="showcase-video-item">
-                  <video class="showcase-video" muted>
-                    <source src="assets/trading (3).mp4" type="video/mp4">
-                  </video>
-                  <div class="showcase-play-btn">▶</div>
-                  <div class="showcase-video-title">Luxury Property Tour</div>
-                </div>
-              </div>
-            </div>
             
             <div class="service-item" data-service="promo">
               <span class="bullet">•</span>
               <span>Promo Videos</span>
-            </div>
-            <div class="service-video-showcase" id="promo-showcase">
-              <div class="showcase-header">
-                <span class="showcase-icon">✨</span>
-                <h4 class="showcase-title">Promotional Video Gallery</h4>
-              </div>
-              <div class="showcase-videos">
-                <div class="showcase-video-item">
-                  <video class="showcase-video" muted>
-                    <source src="assets/motion graphic (3).mp4" type="video/mp4">
-                  </video>
-                  <div class="showcase-play-btn">▶</div>
-                  <div class="showcase-video-title">Brand Promo</div>
-                </div>
-                <div class="showcase-video-item">
-                  <video class="showcase-video" muted>
-                    <source src="assets/trading (4).mp4" type="video/mp4">
-                  </video>
-                  <div class="showcase-play-btn">▶</div>
-                  <div class="showcase-video-title">Product Launch</div>
-                </div>
-              </div>
             </div>
           </div>
           <div class="service-note">
@@ -541,40 +455,8 @@
   <!-- Configuration -->
   <script src="js/config.js"></script>
   
-  <!-- Firebase Configuration -->
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
-    import { getDatabase, ref, push, onValue, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
-
-    // Security check - only allow on approved domains
-    const currentDomain = window.location.hostname;
-    if (!window.CONFIG.allowedDomains.includes(currentDomain)) {
-      console.error('Unauthorized domain access');
-      // Still initialize but with limited functionality
-    }
-
-    // Get Firebase configuration from external config
-    const firebaseConfig = window.CONFIG.firebase;
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const database = getDatabase(app);
-
-    // Make Firebase available globally for the review system
-    window.firebaseApp = app;
-    window.firebaseDb = database;
-    window.firebaseRef = ref;
-    window.firebasePush = push;
-    window.firebaseOnValue = onValue;
-    window.firebaseQuery = query;
-    window.firebaseOrderByChild = orderByChild;
-    window.firebaseLimitToLast = limitToLast;
-  </script>
-  
-  <script src="js/reviews.js"></script>
+  <!-- Local Storage Review System (No Firebase needed!) -->
+  <script src="js/reviews-localstorage.js"></script>
   
   <script>
     // Additional performance optimization
@@ -588,10 +470,33 @@
         }, 500);
       }
       
-      // Initialize review system after page load
-      if (window.reviewSystem) {
-        reviewSystem.init();
-      }
+      // Wait for reviewSystem to be fully initialized
+      setTimeout(() => {
+        if (window.reviewSystem) {
+          console.log('✅ Local Storage Review System Active');
+          console.log('📊 Total Reviews:', reviewSystem.getAllReviews().length);
+          
+          // Admin helper functions (for you to manage reviews in browser console)
+          window.adminReviews = {
+            viewAll: () => reviewSystem.getAllReviews(),
+            approve: (id) => reviewSystem.approveReview(id),
+            reject: (id) => reviewSystem.rejectReview(id),
+            export: () => reviewSystem.exportToJSON(),
+            stats: () => {
+              const reviews = reviewSystem.getAllReviews();
+              console.log('📈 Review Statistics:');
+              console.log('Total:', reviews.length);
+              console.log('Approved:', reviews.filter(r => r.status === 'approved').length);
+              console.log('Pending:', reviews.filter(r => r.status === 'pending').length);
+              console.log('Rejected:', reviews.filter(r => r.status === 'rejected').length);
+            }
+          };
+          
+          console.log('🔧 Admin Tools: Use adminReviews.viewAll(), adminReviews.approve("id"), etc.');
+        } else {
+          console.error('❌ Review system not initialized');
+        }
+      }, 100);
     });
   </script>
 </body>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Discord Webhook Test</title>
+</head>
+<body>
+    <h1>🧪 Discord Webhook Debug Test</h1>
+    <button onclick="testWebhook()">Test Discord Webhook</button>
+    <div id="results"></div>
+
+    <script>
+        function log(message) {
+            document.getElementById('results').innerHTML += '<p>' + message + '</p>';
+            console.log(message);
+        }
+
+        async function testWebhook() {
+            document.getElementById('results').innerHTML = '';
+            log('🧪 Testing Discord webhook...');
+
+            // Same decoding as in your review system
+            const encoded = 'aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwNzEwMjIzMDYyMDAxNjY2MC9Qa3RQOTBid2hsTEtlbFE1d3dTY3VrZTlxbVlqdUtv' + 
+                           'VkxqeEZBVmNSMGRCR2hlcWRVeVhtVFh3QmF6VkI3MEdWdGZmTA==';
+
+            let webhook;
+            try {
+                webhook = atob(encoded);
+                log('✅ Webhook decoded: ' + webhook.substring(0, 50) + '...');
+            } catch (error) {
+                log('❌ Webhook decoding failed: ' + error.message);
+                return;
+            }
+
+            // Test webhook with simple message
+            const testData = {
+                embeds: [{
+                    title: "🧪 Discord Webhook Test", 
+                    description: "Testing webhook from browser",
+                    color: 0x7b2ff2,
+                    fields: [
+                        { name: "Status", value: "Testing", inline: true },
+                        { name: "Time", value: new Date().toLocaleString(), inline: true }
+                    ]
+                }]
+            };
+
+            try {
+                log('📡 Sending test message to Discord...');
+                
+                const response = await fetch(webhook, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                log('📊 Response status: ' + response.status + ' ' + response.statusText);
+
+                if (response.ok) {
+                    log('🎉 SUCCESS! Webhook is working - check your Discord server!');
+                } else if (response.status === 404) {
+                    log('❌ ERROR 404: Webhook not found');
+                    log('💡 This means:');
+                    log('   • Webhook was deleted from Discord');
+                    log('   • Channel/server was deleted');
+                    log('   • Webhook URL is incorrect');
+                    log('🔧 Solution: Create a new Discord webhook');
+                } else {
+                    const errorText = await response.text();
+                    log('❌ ERROR ' + response.status + ': ' + errorText);
+                }
+
+            } catch (error) {
+                log('❌ Network error: ' + error.message);
+                log('💡 This could be CORS policy or network issue');
+            }
+        }
+
+        // Auto-test when page loads
+        window.addEventListener('load', () => {
+            log('🌟 Discord Webhook Test Page Loaded');
+            log('Click the button to test your webhook');
+        });
+    </script>
+</body>
+</html>

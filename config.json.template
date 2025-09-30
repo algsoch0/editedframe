@@ -1,0 +1,9 @@
+{
+  "discord": {
+    "webhook": "YOUR_ENCODED_DISCORD_WEBHOOK_HERE"
+  },
+  "github": {
+    "gistId": "YOUR_GITHUB_GIST_ID_HERE",
+    "token": null
+  }
+}
