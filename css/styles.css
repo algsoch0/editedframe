@@ -2545,7 +2545,7 @@
     
     .reviews-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
       gap:24px;
       margin-bottom:32px;
     }
@@ -2603,6 +2603,8 @@
       color:var(--accent);
       font-size:16px;
       font-weight:700;
+      word-wrap:break-word;
+      overflow-wrap:break-word;
     }
     
     .review-meta{
@@ -2644,6 +2646,10 @@
       line-height:1.6;
       font-size:14px;
       margin:0;
+      word-wrap:break-word;
+      overflow-wrap:break-word;
+      -webkit-hyphens:auto;
+      hyphens:auto;
     }
     
     .review-footer{
@@ -2881,7 +2887,10 @@
       border-radius:8px;
       font-size:13px;
       text-align:center;
-      display:none;
+      display:block;
+      background:rgba(123,47,242,0.1);
+      color:var(--muted);
+      min-height:20px;
     }
     
     .form-message.success{
@@ -5835,26 +5844,65 @@ footer::before{
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+  .reviews-container {
+    padding: 16px;
+  }
+  
   .reviews-header {
     flex-direction: column;
     text-align: center;
+    gap: 16px;
+    margin-bottom: 24px;
   }
   
   .reviews-stats {
     justify-content: center;
+    gap: 16px;
   }
   
   .reviews-stats .stat-item {
-    padding: 15px 20px;
+    padding: 15px 16px;
+    min-width: 100px;
+    flex: 1;
+  }
+  
+  .stat-number {
+    font-size: 24px;
   }
   
   .reviews-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
   
   .review-card {
-    padding: 20px;
+    padding: 16px;
+    margin: 0;
+  }
+  
+  .review-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .reviewer-info {
+    width: 100%;
+  }
+  
+  .review-rating {
+    align-self: flex-end;
+  }
+  
+  .review-text {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  
+  .write-review-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
   }
   
   .review-modal-content {
@@ -5874,6 +5922,10 @@ footer::before{
 }
 
 @media (max-width: 480px) {
+  .reviews-container {
+    padding: 12px;
+  }
+  
   .review-modal-content {
     margin: 10px;
     width: calc(100% - 20px);
@@ -5882,10 +5934,43 @@ footer::before{
   .reviews-stats {
     flex-direction: column;
     width: 100%;
+    gap: 12px;
   }
   
   .reviews-stats .stat-item {
     width: 100%;
+    padding: 12px;
+  }
+  
+  .stat-number {
+    font-size: 20px;
+  }
+  
+  .stat-label {
+    font-size: 11px;
+  }
+  
+  .review-card {
+    padding: 12px;
+  }
+  
+  .reviewer-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .reviewer-name {
+    font-size: 14px;
+  }
+  
+  .review-text {
+    font-size: 12px;
+  }
+  
+  .write-review-btn {
+    padding: 12px 16px;
+    font-size: 14px;
   }
 }
 
