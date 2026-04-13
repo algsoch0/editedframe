@@ -2354,19 +2354,46 @@
       margin:0;
     }
 
-    .footer-profile-card a{
+    .role-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+    }
+
+    .role-tag{
+      display:inline-block;
+      font-size:10px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      font-weight:700;
+      padding:3px 7px;
+      border-radius:999px;
+      background:linear-gradient(rgba(255,255,255,0.92), rgba(255,255,255,0.92)) padding-box,
+                 linear-gradient(135deg, rgba(123,47,242,0.9), rgba(243,87,168,0.9)) border-box;
       color:var(--accent);
+      border:1px solid transparent;
+      box-shadow:0 4px 12px rgba(123,47,242,0.16);
+    }
+
+    .footer-profile-card a{
+      color:#1f2430;
       text-decoration:none;
       word-break:break-word;
       font-weight:600;
-      padding:0;
-      background:none;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:10px;
+      background:rgba(123,47,242,0.08);
+      border:1px solid rgba(123,47,242,0.16);
     }
 
     .footer-profile-card a:hover{
-      color:var(--accent2);
+      color:#fff;
       transform:none;
-      background:none;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color:transparent;
     }
 
     .footer-profile-card .developer-avatar{

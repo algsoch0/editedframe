@@ -336,6 +336,6 @@ For licensing inquiries or collaboration opportunities, please contact via email
 
 ---
 
-**Built with ❤️ and passion for visual storytelling**
+**Engineered for visual storytelling and professional video editing**
 
 ⭐ **Star this repository if you found it helpful!**
