@@ -45,7 +45,7 @@ class VideoPortfolio {
             'motion graphic (1).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265366/motion_graphic_1_cwknb2.mp4',
             'motion graphic (2).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265422/motion_graphic_2_uz78wz.mp4',
             'motion graphic (3).mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265433/motion_graphic_3_yyotbn.mp4',
-            'sub vdo.mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265448/sub_vdo_qr7agc.mp4'
+            'sub vdo.mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1776180801/1_h2ouzq.mp4'
         };
 
         this.videos = [

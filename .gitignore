@@ -6,6 +6,8 @@ contact.php
 *.env.production
 .env.template
 config.json
+rn-portfolio/
+rn-portfolio/
 
 # SQLite database files
 *.db
