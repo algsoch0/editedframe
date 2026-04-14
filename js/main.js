@@ -23,10 +23,13 @@ class VideoPortfolio {
     hideLoadingSpinner() {
         const spinner = document.getElementById('loadingSpinner');
         if (spinner) {
-            setTimeout(() => {
+            requestAnimationFrame(() => {
                 spinner.classList.add('hidden');
                 document.body.classList.add('loaded');
-            }, 500);
+                setTimeout(() => {
+                    spinner.style.display = 'none';
+                }, 250);
+            });
         } else {
             document.body.classList.add('loaded');
         }
