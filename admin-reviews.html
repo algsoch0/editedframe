@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review Admin Panel - edited.frame</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', system-ui, sans-serif;
             background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
@@ -18,21 +13,15 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
+        .container { max-width: 1200px; margin: 0 auto; }
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 24px;
             padding: 20px;
             background: linear-gradient(135deg, rgba(123,47,242,0.1), rgba(243,87,168,0.1));
             border-radius: 20px;
             border: 2px solid rgba(123,47,242,0.2);
         }
-        
         .header h1 {
             font-size: 32px;
             margin-bottom: 8px;
@@ -41,570 +30,580 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .stat-card {
-            background: rgba(123,47,242,0.1);
-            padding: 20px;
+        .login-wrap {
+            max-width: 420px;
+            margin: 70px auto;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(123,47,242,0.25);
             border-radius: 16px;
-            border: 2px solid rgba(123,47,242,0.2);
-            text-align: center;
+            padding: 24px;
         }
-        
-        .stat-number {
-            font-size: 36px;
-            font-weight: 800;
-            color: #7b2ff2;
-            margin-bottom: 8px;
+        .login-wrap h2 { margin-bottom: 10px; }
+        .login-wrap p { color: #cfd1da; margin-bottom: 12px; }
+        .login-wrap input {
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(123,47,242,0.25);
+            padding: 12px;
+            background: rgba(255,255,255,0.95);
         }
-        
-        .stat-label {
-            color: #ccc;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 1px;
-        }
-        
-        .actions {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        
         .btn {
-            padding: 12px 24px;
+            padding: 12px 18px;
             border: none;
             border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
+            transition: all 0.25s ease;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
         }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #7b2ff2, #f357a8);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: #7b2ff2;
-            border: 2px solid #7b2ff2;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(123,47,242,0.3);
-        }
-        
-        .reviews-grid {
-            display: grid;
-            gap: 24px;
-        }
-        
-        .review-item {
-            background: rgba(255,255,255,0.05);
-            padding: 24px;
-            border-radius: 16px;
-            border: 2px solid rgba(123,47,242,0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .review-item:hover {
-            border-color: #7b2ff2;
-            transform: translateY(-2px);
-        }
-        
-        .review-header {
+        .btn-primary { background: linear-gradient(135deg, #7b2ff2, #f357a8); color: white; }
+        .btn-secondary { background: transparent; color: #7b2ff2; border: 2px solid #7b2ff2; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn:hover { transform: translateY(-1px); }
+        .error-msg { color: #ff8f8f; min-height: 20px; margin-top: 8px; }
+
+        .admin-app[hidden], .login-wrap[hidden] { display: none !important; }
+        .quick-nav {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-        
-        .reviewer-info h3 {
-            color: #7b2ff2;
-            margin-bottom: 4px;
-        }
-        
-        .reviewer-meta {
-            color: #ccc;
-            font-size: 14px;
-        }
-        
-        .rating {
-            font-size: 18px;
-            color: #f357a8;
-        }
-        
-        .review-text {
-            margin: 16px 0;
-            line-height: 1.6;
-            color: #eee;
-        }
-        
-        .review-actions {
-            display: flex;
-            gap: 12px;
+            align-items: center;
+            gap: 10px;
             flex-wrap: wrap;
+            margin-bottom: 14px;
         }
-        
-        .btn-approve {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
+        .quick-nav-left { display: flex; gap: 10px; flex-wrap: wrap; }
+        .quick-link {
+            padding: 9px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(123,47,242,0.35);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            background: rgba(123,47,242,0.15);
             cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
         }
-        
-        .btn-reject {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
+        .quick-link:hover { background: rgba(123,47,242,0.28); }
+        .db-status {
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: 700;
             font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .btn-delete {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            letter-spacing: 0.04em;
             text-transform: uppercase;
+            border: 1px solid transparent;
         }
-        
-        .status-approved { background: rgba(40,167,69,0.2); color: #28a745; }
-        .status-pending { background: rgba(255,193,7,0.2); color: #ffc107; }
-        .status-rejected { background: rgba(220,53,69,0.2); color: #dc3545; }
-        
-        .filter-tabs {
+        .db-status.checking { background: rgba(255,193,7,0.18); border-color: rgba(255,193,7,0.45); color: #ffe28a; }
+        .db-status.connected { background: rgba(40,167,69,0.2); border-color: rgba(40,167,69,0.45); color: #8df0aa; }
+        .db-status.disconnected { background: rgba(220,53,69,0.2); border-color: rgba(220,53,69,0.45); color: #ff9aa5; }
+        .video-manager {
+            margin: 18px 0 22px;
+            padding: 18px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(123,47,242,0.18);
+        }
+        .video-manager h2 { margin-bottom: 8px; }
+        .video-manager p { color: #cfd1da; margin-bottom: 14px; }
+        .video-form {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+        }
+        .video-form input,
+        .video-form select {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(123,47,242,0.25);
+            background: rgba(255,255,255,0.95);
+            color: #1f2430;
+        }
+        .video-list {
+            margin-top: 14px;
+            display: grid;
+            gap: 10px;
+        }
+        .video-row {
             display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(123,47,242,0.14);
+        }
+        .video-row-info { min-width: 0; }
+        .video-row-title { font-weight: 700; margin-bottom: 4px; }
+        .video-row-meta { color: #cfd1da; font-size: 12px; word-break: break-all; }
+        .top-actions { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 16px;
-            margin-bottom: 24px;
-            border-bottom: 2px solid rgba(123,47,242,0.1);
-            padding-bottom: 16px;
+            margin-bottom: 20px;
         }
-        
-        .filter-tab {
-            padding: 8px 16px;
-            background: transparent;
-            border: none;
-            color: #ccc;
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .filter-tab.active {
-            background: rgba(123,47,242,0.2);
-            color: #7b2ff2;
-        }
-        
-        .empty-state {
+        .stat-card {
+            background: rgba(123,47,242,0.1);
+            border: 1px solid rgba(123,47,242,0.2);
+            border-radius: 12px;
+            padding: 16px;
             text-align: center;
-            padding: 60px;
-            color: #ccc;
         }
-        
-        .empty-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-            opacity: 0.5;
+        .stat-number { font-size: 30px; font-weight: 800; color: #7b2ff2; }
+        .stat-label { color: #cfd1da; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .filter-tabs { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+        .filter-tab {
+            padding: 8px 14px;
+            background: transparent;
+            border: 1px solid rgba(123,47,242,0.25);
+            color: #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
         }
-        
-        @media (max-width: 768px) {
-            .actions {
-                flex-direction: column;
-            }
-            
-            .review-header {
-                flex-direction: column;
-                gap: 12px;
-            }
-            
-            .filter-tabs {
-                flex-wrap: wrap;
-            }
+        .filter-tab.active { background: rgba(123,47,242,0.2); color: #fff; }
+        .reviews-grid { display: grid; gap: 18px; }
+        .review-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+            border: 1px solid rgba(123,47,242,0.15);
+            padding: 18px;
         }
+        .review-header { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .reviewer-info h3 { color: #c7a8ff; margin-bottom: 4px; }
+        .reviewer-meta { color: #cfd1da; font-size: 13px; }
+        .rating { color: #ffd060; font-size: 18px; }
+        .review-text { margin: 10px 0; color: #f0f0f0; line-height: 1.5; white-space: pre-wrap; }
+        .review-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .status-badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; text-transform: uppercase; font-weight: 700; }
+        .status-approved { background: rgba(40,167,69,0.2); color: #7ee39a; }
+        .status-pending { background: rgba(255,193,7,0.2); color: #ffd65f; }
+        .status-rejected { background: rgba(220,53,69,0.2); color: #ff8e9a; }
+        .empty-state { text-align: center; padding: 50px 20px; color: #cfd1da; }
+        @media (max-width: 768px) { .review-header { flex-direction: column; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🛡️ Review Admin Panel</h1>
-            <p>Manage reviews for edited.frame portfolio</p>
+<div class="container">
+    <div class="quick-nav">
+        <div class="quick-nav-left">
+            <a class="quick-link" href="index.html">Main Site</a>
+            <button class="quick-link" type="button" onclick="goBack()">Back</button>
         </div>
-        
-        <div class="stats" id="statsGrid">
-            <!-- Stats will be loaded here -->
-        </div>
-        
-        <div class="actions">
-            <button class="btn btn-primary" onclick="refreshReviews()">
-                <span>🔄</span>
-                <span>Refresh</span>
-            </button>
-            <button class="btn btn-secondary" onclick="exportReviews()">
-                <span>📥</span>
-                <span>Export Backup</span>
-            </button>
-            <button class="btn btn-success" onclick="exportForGist()">
-                <span>🌍</span>
-                <span>Export for Gist</span>
-            </button>
-            <button class="btn btn-secondary" onclick="clearAllReviews()">
-                <span>🗑️</span>
-                <span>Clear All</span>
-            </button>
-            <button class="btn btn-secondary" onclick="importSampleReviews()">
-                <span>📝</span>
-                <span>Add Sample Reviews</span>
-            </button>
-        </div>
-        
-        <div class="filter-tabs">
-            <button class="filter-tab active" onclick="filterReviews('all')">All Reviews</button>
-            <button class="filter-tab" onclick="filterReviews('pending')">Pending</button>
-            <button class="filter-tab" onclick="filterReviews('approved')">Approved</button>
-            <button class="filter-tab" onclick="filterReviews('rejected')">Rejected</button>
-        </div>
-        
-        <div class="reviews-grid" id="reviewsGrid">
-            <!-- Reviews will be loaded here -->
-        </div>
+        <div id="dbStatus" class="db-status checking">DB: Checking...</div>
     </div>
 
-    <script>
-        class ReviewAdmin {
-            constructor() {
-                this.storageKey = 'editedframe_reviews';
-                this.currentFilter = 'all';
-                this.init();
-            }
-            
-            init() {
-                this.loadStats();
-                this.loadReviews();
-            }
-            
-            getStoredReviews() {
-                try {
-                    const stored = localStorage.getItem(this.storageKey);
-                    return stored ? JSON.parse(stored) : [];
-                } catch(e) {
-                    console.error('Error loading reviews:', e);
-                    return [];
-                }
-            }
-            
-            saveReviews(reviews) {
-                try {
-                    localStorage.setItem(this.storageKey, JSON.stringify(reviews));
-                    return true;
-                } catch(e) {
-                    console.error('Error saving reviews:', e);
-                    return false;
-                }
-            }
-            
-            loadStats() {
-                const reviews = this.getStoredReviews();
-                const stats = {
-                    total: reviews.length,
-                    approved: reviews.filter(r => r.status === 'approved').length,
-                    pending: reviews.filter(r => r.status === 'pending').length,
-                    rejected: reviews.filter(r => r.status === 'rejected').length,
-                    avgRating: reviews.length > 0 ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1) : '0.0'
-                };
-                
-                document.getElementById('statsGrid').innerHTML = `
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.total}</div>
-                        <div class="stat-label">Total Reviews</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.pending}</div>
-                        <div class="stat-label">Pending</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.approved}</div>
-                        <div class="stat-label">Approved</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.rejected}</div>
-                        <div class="stat-label">Rejected</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.avgRating}</div>
-                        <div class="stat-label">Avg Rating</div>
-                    </div>
-                `;
-            }
-            
-            loadReviews() {
-                const reviews = this.getStoredReviews();
-                const filtered = this.currentFilter === 'all' ? reviews : reviews.filter(r => r.status === this.currentFilter);
-                
-                const grid = document.getElementById('reviewsGrid');
-                
-                if (filtered.length === 0) {
-                    grid.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">📝</div>
-                            <h3>No reviews found</h3>
-                            <p>No reviews match the current filter.</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                // Sort by timestamp (newest first)
-                filtered.sort((a, b) => b.timestamp - a.timestamp);
-                
-                grid.innerHTML = filtered.map(review => this.createReviewHTML(review)).join('');
-            }
-            
-            createReviewHTML(review) {
-                const date = new Date(review.timestamp).toLocaleDateString();
-                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-                
-                return `
-                    <div class="review-item">
-                        <div class="review-header">
-                            <div class="reviewer-info">
-                                <h3>${review.reviewerName}</h3>
-                                <div class="reviewer-meta">
-                                    ${review.projectType} • ${date} • ${review.reviewerEmail || 'No email'}
-                                    ${review.reviewerInstagram ? ` • ${review.reviewerInstagram}` : ''}
-                                </div>
-                            </div>
-                            <div class="review-rating">
-                                <div class="rating">${stars}</div>
-                                <div class="status-badge status-${review.status}">${review.status}</div>
-                            </div>
-                        </div>
-                        
-                        <div class="review-text">${review.reviewText}</div>
-                        
-                        <div class="review-actions">
-                            ${review.status !== 'approved' ? `<button class="btn-approve" onclick="admin.updateReviewStatus('${review.id}', 'approved')">✅ Approve</button>` : ''}
-                            ${review.status !== 'rejected' ? `<button class="btn-reject" onclick="admin.updateReviewStatus('${review.id}', 'rejected')">❌ Reject</button>` : ''}
-                            ${review.status !== 'pending' ? `<button class="btn-reject" onclick="admin.updateReviewStatus('${review.id}', 'pending')">⏳ Pending</button>` : ''}
-                            <button class="btn-delete" onclick="admin.deleteReview('${review.id}')">🗑️ Delete</button>
-                        </div>
-                        
-                        <div style="margin-top: 12px; font-size: 12px; color: #888;">
-                            ID: ${review.id} • Display: ${review.allowDisplay ? 'Yes' : 'No'}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            updateReviewStatus(reviewId, newStatus) {
-                const reviews = this.getStoredReviews();
-                const review = reviews.find(r => r.id === reviewId);
-                
-                if (review) {
-                    review.status = newStatus;
-                    this.saveReviews(reviews);
-                    this.loadStats();
-                    this.loadReviews();
-                    console.log(`✅ Review ${reviewId} status updated to ${newStatus}`);
-                }
-            }
-            
-            deleteReview(reviewId) {
-                if (confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
-                    const reviews = this.getStoredReviews();
-                    const filteredReviews = reviews.filter(r => r.id !== reviewId);
-                    this.saveReviews(filteredReviews);
-                    this.loadStats();
-                    this.loadReviews();
-                    console.log(`🗑️ Review ${reviewId} deleted`);
-                }
-            }
-            
-            filterReviews(status) {
-                this.currentFilter = status;
-                
-                // Update active tab
-                document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
-                event.target.classList.add('active');
-                
-                this.loadReviews();
-            }
-            
-            exportReviews() {
-                const reviews = this.getStoredReviews();
-                const dataStr = JSON.stringify(reviews, null, 2);
-                const dataBlob = new Blob([dataStr], {type: 'application/json'});
-                
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(dataBlob);
-                link.download = `editedframe_reviews_backup_${new Date().toISOString().split('T')[0]}.json`;
-                link.click();
-                
-                console.log('📥 Reviews exported successfully');
-            }
+    <div id="loginWrap" class="login-wrap" hidden>
+        <h2>Admin Login</h2>
+        <p>Only admin can access review controls.</p>
+        <input id="adminName" type="text" placeholder="Admin name" autocomplete="username">
+        <input id="adminPassword" type="password" placeholder="Password" autocomplete="current-password">
+        <button class="btn btn-primary" onclick="loginAdmin()">Login</button>
+        <div id="loginError" class="error-msg"></div>
+    </div>
 
-            exportForGist() {
-                const reviews = this.getStoredReviews();
-                const approvedReviews = reviews.filter(r => r.status === 'approved' && r.allowDisplay);
-                
-                if (approvedReviews.length === 0) {
-                    alert('No approved reviews to export for Gist');
-                    return;
-                }
-                
-                const gistContent = JSON.stringify(approvedReviews, null, 2);
-                
-                // Create a text area to copy from
-                const textArea = document.createElement('textarea');
-                textArea.value = gistContent;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                
-                // Show instructions
-                alert(`✅ Copied ${approvedReviews.length} approved reviews to clipboard!\n\nNext steps:\n1. Go to your GitHub Gist\n2. Click "Edit"\n3. Replace content with clipboard (Ctrl+V)\n4. Save changes\n\nAll visitors will now see these reviews!`);
-                
-                console.log('🌍 Approved reviews copied for Gist update');
+    <div id="adminApp" class="admin-app" hidden>
+        <div class="header">
+            <h1>Review Admin Panel</h1>
+            <p>MongoDB-backed review moderation dashboard</p>
+        </div>
+
+        <div class="top-actions">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="refreshReviews()">Refresh</button>
+                <button class="btn btn-secondary" onclick="exportReviews()">Export Backup</button>
+                <button class="btn btn-secondary" onclick="document.querySelector('.video-manager')?.scrollIntoView({ behavior: 'smooth', block: 'start' })">Video Manager</button>
+            </div>
+            <button class="btn btn-danger" onclick="logoutAdmin()">Logout</button>
+        </div>
+
+        <div class="video-manager">
+            <h2>Video Manager</h2>
+            <p>Add or manage video URLs here. This tool is hidden from public users.</p>
+            <div class="video-form">
+                <input type="url" id="adminVideoUrl" placeholder="https://.../video.mp4">
+                <input type="text" id="adminVideoTitle" placeholder="Optional title (auto if empty)">
+                <select id="adminVideoCategory">
+                    <option value="social-media">Social Media Edits</option>
+                    <option value="trading-reel">Trading Reels</option>
+                    <option value="educational-video">Educational Videos</option>
+                    <option value="motion-graphic">Motion Graphics</option>
+                </select>
+                <button class="btn btn-primary" type="button" onclick="addAdminVideo()">Add Video</button>
+                <button class="btn btn-secondary" type="button" onclick="clearAdminVideos()">Clear All</button>
+            </div>
+            <div id="adminVideoMsg" class="error-msg"></div>
+            <div id="adminVideoList" class="video-list"></div>
+        </div>
+
+        <div class="stats" id="statsGrid"></div>
+
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterReviews('all', event)">All Reviews</button>
+            <button class="filter-tab" onclick="filterReviews('pending', event)">Pending</button>
+            <button class="filter-tab" onclick="filterReviews('approved', event)">Approved</button>
+            <button class="filter-tab" onclick="filterReviews('rejected', event)">Rejected</button>
+        </div>
+
+        <div class="reviews-grid" id="reviewsGrid"></div>
+    </div>
+</div>
+
+<script src="js/config.js"></script>
+<script>
+class ReviewAdmin {
+    constructor() {
+        this.apiBaseUrl = (window.CONFIG && window.CONFIG.apiBaseUrl) || '/api';
+        this.currentFilter = 'all';
+        this.reviews = [];
+    }
+
+    setDbStatus(type, message) {
+        const el = document.getElementById('dbStatus');
+        if (!el) return;
+        el.className = `db-status ${type}`;
+        el.textContent = message;
+    }
+
+    async updateDbStatus() {
+        this.setDbStatus('checking', 'DB: Checking...');
+        try {
+            const res = await fetch(`${this.apiBaseUrl}/health`, { credentials: 'include' });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok && data.success) {
+                this.setDbStatus('connected', 'DB: Connected');
+            } else {
+                this.setDbStatus('disconnected', 'DB: Offline');
             }
-            
-            clearAllReviews() {
-                if (confirm('Are you sure you want to delete ALL reviews? This action cannot be undone!')) {
-                    localStorage.removeItem(this.storageKey);
-                    this.loadStats();
-                    this.loadReviews();
-                    console.log('🗑️ All reviews cleared');
-                }
-            }
-            
-            importSampleReviews() {
-                const sampleReviews = [
-                    {
-                        id: 'sample_1',
-                        reviewerName: 'Alex Thompson',
-                        reviewerEmail: 'alex@example.com',
-                        reviewerInstagram: '@alexthompson',
-                        projectType: 'Instagram Reel',
-                        rating: 5,
-                        reviewText: 'Absolutely amazing work! Sachin created an incredible Instagram reel for my business. The editing was smooth, the transitions were perfect, and it helped boost my engagement significantly. Highly recommend!',
-                        allowDisplay: true,
-                        status: 'approved',
-                        timestamp: Date.now() - 86400000,
-                        date: new Date(Date.now() - 86400000).toISOString().split('T')[0]
-                    },
-                    {
-                        id: 'sample_2',
-                        reviewerName: 'Sarah Johnson',
-                        reviewerEmail: 'sarah.j@gmail.com',
-                        reviewerInstagram: '',
-                        projectType: 'YouTube Short',
-                        rating: 4,
-                        reviewText: 'Great experience working with Sachin. The YouTube short came out really well and the turnaround time was impressive. Looking forward to working together again!',
-                        allowDisplay: true,
-                        status: 'approved',
-                        timestamp: Date.now() - 172800000,
-                        date: new Date(Date.now() - 172800000).toISOString().split('T')[0]
-                    },
-                    {
-                        id: 'sample_3',
-                        reviewerName: 'Mike Chen',
-                        reviewerEmail: 'mike.chen@business.com',
-                        reviewerInstagram: '@mikechentrading',
-                        projectType: 'Trading Video',
-                        rating: 5,
-                        reviewText: 'Perfect trading video! Sachin understood exactly what I needed and delivered a professional video that helped explain complex trading concepts in a simple way. Excellent communication throughout.',
-                        allowDisplay: true,
-                        status: 'pending',
-                        timestamp: Date.now() - 259200000,
-                        date: new Date(Date.now() - 259200000).toISOString().split('T')[0]
-                    }
-                ];
-                
-                const existingReviews = this.getStoredReviews();
-                const newReviews = [...existingReviews];
-                
-                sampleReviews.forEach(sample => {
-                    if (!existingReviews.find(r => r.id === sample.id)) {
-                        newReviews.push(sample);
-                    }
-                });
-                
-                this.saveReviews(newReviews);
-                this.loadStats();
-                this.loadReviews();
-                console.log('📝 Sample reviews added');
-            }
+        } catch (_) {
+            this.setDbStatus('disconnected', 'DB: Offline');
         }
-        
-        // Global functions for HTML onclick handlers
-        const admin = new ReviewAdmin();
-        
-        function refreshReviews() {
-            admin.loadStats();
-            admin.loadReviews();
-            console.log('🔄 Reviews refreshed');
+    }
+
+    async api(path, options = {}) {
+        const res = await fetch(`${this.apiBaseUrl}${path}`, {
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+            ...options,
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+            throw new Error(data.message || `Request failed (${res.status})`);
         }
-        
-        function exportReviews() {
-            admin.exportReviews();
+        return data;
+    }
+
+    async loadStats() {
+        const stats = await this.api('/reviews/admin/stats');
+        document.getElementById('statsGrid').innerHTML = `
+            <div class="stat-card"><div class="stat-number">${stats.total}</div><div class="stat-label">Total</div></div>
+            <div class="stat-card"><div class="stat-number">${stats.pending}</div><div class="stat-label">Pending</div></div>
+            <div class="stat-card"><div class="stat-number">${stats.approved}</div><div class="stat-label">Approved</div></div>
+            <div class="stat-card"><div class="stat-number">${stats.rejected}</div><div class="stat-label">Rejected</div></div>
+            <div class="stat-card"><div class="stat-number">${stats.avgRating.toFixed(1)}</div><div class="stat-label">Avg Rating</div></div>
+        `;
+    }
+
+    async loadReviews() {
+        const status = this.currentFilter;
+        const path = status === 'all' ? '/reviews/admin/all' : `/reviews/admin/all?status=${encodeURIComponent(status)}`;
+        const data = await this.api(path);
+        this.reviews = data.items || [];
+
+        const grid = document.getElementById('reviewsGrid');
+        if (!this.reviews.length) {
+            grid.innerHTML = '<div class="empty-state"><h3>No reviews found</h3><p>No data in this filter.</p></div>';
+            return;
         }
 
-        function exportForGist() {
-            admin.exportForGist();
+        grid.innerHTML = this.reviews.map((review) => this.createReviewHTML(review)).join('');
+    }
+
+    createReviewHTML(review) {
+        const date = new Date(review.createdAt || Date.now()).toLocaleDateString();
+        const stars = ''.repeat(Math.max(1, review.rating || 0)) + ''.repeat(5 - Math.max(1, review.rating || 0));
+
+        return `
+            <div class="review-item">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <h3>${this.escape(review.reviewerName || 'Anonymous')}</h3>
+                        <div class="reviewer-meta">
+                            ${this.escape(review.projectType || 'Project')}  ${date}  ${this.escape(review.reviewerEmail || 'No email')}
+                            ${review.reviewerInstagram ? `  ${this.escape(review.reviewerInstagram)}` : ''}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="rating">${stars}</div>
+                        <div class="status-badge status-${review.status}">${review.status}</div>
+                    </div>
+                </div>
+                <div class="review-text">${this.escape(review.reviewText || '')}</div>
+                <div class="review-actions">
+                    ${review.status !== 'approved' ? `<button class="btn btn-primary" onclick="admin.updateReviewStatus('${review.id}', 'approved')">Approve</button>` : ''}
+                    ${review.status !== 'rejected' ? `<button class="btn btn-secondary" onclick="admin.updateReviewStatus('${review.id}', 'rejected')">Reject</button>` : ''}
+                    ${review.status !== 'pending' ? `<button class="btn btn-secondary" onclick="admin.updateReviewStatus('${review.id}', 'pending')">Mark Pending</button>` : ''}
+                    <button class="btn btn-danger" onclick="admin.deleteReview('${review.id}')">Delete</button>
+                </div>
+            </div>
+        `;
+    }
+
+    async updateReviewStatus(reviewId, status) {
+        await this.api(`/reviews/admin/${reviewId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status }),
+        });
+        await this.loadStats();
+        await this.loadReviews();
+    }
+
+    async deleteReview(reviewId) {
+        if (!confirm('Delete this review permanently?')) return;
+        await this.api(`/reviews/admin/${reviewId}`, { method: 'DELETE' });
+        await this.loadStats();
+        await this.loadReviews();
+    }
+
+    async refresh() {
+        await this.loadStats();
+        await this.loadReviews();
+    }
+
+    exportReviews() {
+        const data = JSON.stringify(this.reviews, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `editedframe_reviews_${new Date().toISOString().slice(0, 10)}.json`;
+        link.click();
+    }
+
+    escape(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+}
+
+class AdminVideoManager {
+    constructor() {
+        this.storageKey = 'editedframe_custom_videos_v1';
+        this.videos = [];
+        this.load();
+    }
+
+    load() {
+        try {
+            const raw = localStorage.getItem(this.storageKey);
+            this.videos = raw ? JSON.parse(raw) : [];
+            if (!Array.isArray(this.videos)) this.videos = [];
+        } catch (_) {
+            this.videos = [];
         }
-        
-        function clearAllReviews() {
-            admin.clearAllReviews();
+    }
+
+    save() {
+        localStorage.setItem(this.storageKey, JSON.stringify(this.videos));
+    }
+
+    inferTitle(url) {
+        try {
+            const pathname = new URL(url).pathname;
+            const fileName = pathname.split('/').pop() || 'Video';
+            return fileName.replace(/\.[^/.]+$/, '').replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim() || 'Untitled Video';
+        } catch (_) {
+            return 'Untitled Video';
         }
-        
-        function importSampleReviews() {
-            admin.importSampleReviews();
+    }
+
+    normalizeCategory(category) {
+        const value = String(category || '').toLowerCase().trim();
+        const map = {
+            'trading-reel': 'trading-reel',
+            'educational-video': 'educational-video',
+            'social-media': 'social-media',
+            'motion-graphic': 'motion-graphic',
+        };
+        return map[value] || 'social-media';
+    }
+
+    categoryLabel(category) {
+        const labels = {
+            'social-media': 'Social Media Edits',
+            'trading-reel': 'Trading Reels',
+            'educational-video': 'Educational Videos',
+            'motion-graphic': 'Motion Graphics',
+        };
+        return labels[category] || 'Social Media Edits';
+    }
+
+    render() {
+        const list = document.getElementById('adminVideoList');
+        if (!list) return;
+
+        if (!this.videos.length) {
+            list.innerHTML = '<div class="empty-state"><h3>No custom videos yet</h3><p>Add one using the form above.</p></div>';
+            return;
         }
-        
-        function filterReviews(status) {
-            admin.filterReviews(status);
+
+        list.innerHTML = this.videos.map((video) => `
+            <div class="video-row">
+                <div class="video-row-info">
+                    <div class="video-row-title">${this.escape(video.title || 'Untitled Video')}</div>
+                    <div class="video-row-meta">${this.categoryLabel(video.category)} • ${this.escape(video.url)}</div>
+                </div>
+                <button class="btn btn-danger" type="button" onclick="removeAdminVideo('${video.id}')">Delete</button>
+            </div>
+        `).join('');
+    }
+
+    add(url, title, category) {
+        const safeUrl = String(url || '').trim();
+        if (!safeUrl) {
+            return { success: false, message: 'Please enter a video URL.' };
         }
-        
-        // Auto-refresh every 30 seconds
-        setInterval(() => {
-            admin.loadStats();
-            admin.loadReviews();
-        }, 30000);
-        
-        console.log('🛡️ Review Admin Panel loaded');
-        console.log('📊 Total reviews:', admin.getStoredReviews().length);
-    </script>
+        try {
+            const parsed = new URL(safeUrl);
+            if (!['http:', 'https:'].includes(parsed.protocol)) {
+                return { success: false, message: 'URL must start with http or https.' };
+            }
+        } catch (_) {
+            return { success: false, message: 'Please enter a valid video URL.' };
+        }
+
+        const item = {
+            id: `custom-${Date.now()}`,
+            url: safeUrl,
+            title: String(title || '').trim() || this.inferTitle(safeUrl),
+            category: this.normalizeCategory(category),
+            custom: true,
+        };
+
+        this.videos.unshift(item);
+        this.save();
+        this.render();
+        return { success: true, message: 'Video saved.' };
+    }
+
+    remove(id) {
+        this.videos = this.videos.filter((video) => video.id !== id);
+        this.save();
+        this.render();
+    }
+
+    clear() {
+        this.videos = [];
+        this.save();
+        this.render();
+    }
+
+    escape(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+}
+
+const admin = new ReviewAdmin();
+const videoAdmin = new AdminVideoManager();
+
+function addAdminVideo() {
+    const url = document.getElementById('adminVideoUrl')?.value || '';
+    const title = document.getElementById('adminVideoTitle')?.value || '';
+    const category = document.getElementById('adminVideoCategory')?.value || 'social-media';
+    const msg = document.getElementById('adminVideoMsg');
+
+    const result = videoAdmin.add(url, title, category);
+    if (msg) {
+        msg.textContent = result.message;
+        msg.style.color = result.success ? '#8df0aa' : '#ff9aa5';
+    }
+
+    if (result.success) {
+        if (document.getElementById('adminVideoUrl')) document.getElementById('adminVideoUrl').value = '';
+        if (document.getElementById('adminVideoTitle')) document.getElementById('adminVideoTitle').value = '';
+    }
+}
+
+function removeAdminVideo(id) {
+    videoAdmin.remove(id);
+}
+
+function clearAdminVideos() {
+    if (!confirm('Clear all custom videos?')) return;
+    videoAdmin.clear();
+}
+
+async function checkSession() {
+    await admin.updateDbStatus();
+    try {
+        const me = await admin.api('/auth/me');
+        if (!me.isAdmin) {
+            throw new Error('Not admin');
+        }
+        document.getElementById('loginWrap').hidden = true;
+        document.getElementById('adminApp').hidden = false;
+        videoAdmin.render();
+        await admin.refresh();
+    } catch (_) {
+        document.getElementById('adminApp').hidden = true;
+        document.getElementById('loginWrap').hidden = false;
+    }
+}
+
+async function loginAdmin() {
+    const username = document.getElementById('adminName').value.trim();
+    const password = document.getElementById('adminPassword').value;
+
+    try {
+        await admin.api('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password }),
+        });
+        document.getElementById('loginError').textContent = '';
+        await checkSession();
+    } catch (error) {
+        document.getElementById('loginError').textContent = error.message || 'Login failed';
+    }
+}
+
+async function logoutAdmin() {
+    await admin.api('/auth/logout', { method: 'POST' });
+    await checkSession();
+}
+
+function goBack() {
+    if (window.history.length > 1) {
+        window.history.back();
+        return;
+    }
+    window.location.href = 'index.html';
+}
+
+function refreshReviews() { admin.refresh(); }
+function exportReviews() { admin.exportReviews(); }
+
+function filterReviews(status, event) {
+    admin.currentFilter = status;
+    document.querySelectorAll('.filter-tab').forEach((tab) => tab.classList.remove('active'));
+    if (event && event.target) event.target.classList.add('active');
+    admin.loadReviews();
+}
+
+checkSession();
+setInterval(() => admin.updateDbStatus(), 30000);
+</script>
 </body>
 </html>

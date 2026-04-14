@@ -7,7 +7,9 @@
     "start": "npx serve .",
     "dev": "python -m http.server 8000",
     "build": "echo 'No build process needed for static site'",
-    "deploy": "echo 'Deploy to your hosting platform'"
+    "deploy": "echo 'Deploy to your hosting platform'",
+    "api:start": "npx kill-port 4000 & node server/app.js",
+    "api:dev": "npx kill-port 4000 & nodemon server/app.js"
   },
   "repository": {
     "type": "git",
@@ -35,7 +37,17 @@
     "url": "https://github.com/yourusername/edited-frame-portfolio/issues"
   },
   "homepage": "https://github.com/yourusername/edited-frame-portfolio#readme",
+  "dependencies": {
+    "connect-mongo": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.11.0"
+  },
   "devDependencies": {
+    "kill-port": "^2.0.1",
+    "nodemon": "^3.1.10",
     "serve": "^14.2.0"
   },
   "engines": {

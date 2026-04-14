@@ -2,6 +2,10 @@
 // This approach minimizes exposure while maintaining functionality
 
 window.CONFIG = {
+    apiBaseUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:4000/api'
+        : 'https://your-api-domain.com/api',
+
     // Firebase configuration - these are client-side safe values
     firebase: {
         apiKey: "AIzaSyAVsXzqI9MRxA8BuB6KQvGF4p-BGAlX9rA",

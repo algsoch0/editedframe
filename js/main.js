@@ -5,6 +5,8 @@ class VideoPortfolio {
         this.lightbox = document.getElementById('lightbox');
         this.lightboxVideo = document.getElementById('lightboxVideo');
         this.workGrid = document.getElementById('workGrid');
+        this.customVideosStorageKey = 'editedframe_custom_videos_v1';
+        this.currentFilter = 'all';
         this.videos = [];
         
         this.init();
@@ -15,9 +17,207 @@ class VideoPortfolio {
         this.loadVideos();
         this.renderVideoGrid();
         this.setupEventListeners();
+        this.setupVideoManager();
         this.setupFooterVideos();
         
         console.log('VideoPortfolio initialized successfully');
+    }
+
+    getCustomVideos() {
+        try {
+            const raw = localStorage.getItem(this.customVideosStorageKey);
+            const parsed = raw ? JSON.parse(raw) : [];
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.warn('Failed to parse saved custom videos', error);
+            return [];
+        }
+    }
+
+    saveCustomVideos(videos) {
+        localStorage.setItem(this.customVideosStorageKey, JSON.stringify(videos));
+    }
+
+    normalizeCategory(category) {
+        const value = (category || '').toLowerCase().trim();
+        const map = {
+            'trading': 'trading-reel',
+            'trading-reel': 'trading-reel',
+            'trading reels': 'trading-reel',
+            'educational': 'educational-video',
+            'educational-video': 'educational-video',
+            'education': 'educational-video',
+            'motion': 'motion-graphic',
+            'motion-graphic': 'motion-graphic',
+            'motion graphics': 'motion-graphic',
+            'social': 'social-media',
+            'social-media': 'social-media',
+            'social media': 'social-media'
+        };
+        return map[value] || 'social-media';
+    }
+
+    categoryToType(category) {
+        const typeMap = {
+            'trading-reel': 'Trading Reel',
+            'educational-video': 'Educational',
+            'motion-graphic': 'Motion Graphics',
+            'social-media': 'Social Media'
+        };
+        return typeMap[category] || 'Social Media';
+    }
+
+    inferTitleFromUrl(url) {
+        try {
+            const pathname = new URL(url).pathname;
+            const fileName = pathname.split('/').pop() || 'Video';
+            const cleaned = fileName
+                .replace(/\.[^/.]+$/, '')
+                .replace(/[_-]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            return cleaned
+                .split(' ')
+                .filter(Boolean)
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ') || 'Untitled Video';
+        } catch (error) {
+            return 'Untitled Video';
+        }
+    }
+
+    isValidVideoUrl(url) {
+        try {
+            const parsed = new URL(url);
+            if (!['http:', 'https:'].includes(parsed.protocol)) {
+                return false;
+            }
+            return /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(parsed.pathname + parsed.search);
+        } catch (error) {
+            return false;
+        }
+    }
+
+    getVideoUrl(video) {
+        if (video.url) return video.url;
+        return this.cloudinaryUrls[video.filename] || `assets/${video.filename}`;
+    }
+
+    mergeVideoCollections() {
+        const customVideos = this.getCustomVideos();
+        this.videos = [...this.baseVideos, ...customVideos];
+    }
+
+    addVideoFromUrl(url, options = {}) {
+        const safeUrl = (url || '').trim();
+        if (!this.isValidVideoUrl(safeUrl)) {
+            return { success: false, message: 'Please enter a direct video URL ending in .mp4/.webm/.mov/.m4v' };
+        }
+
+        const category = this.normalizeCategory(options.category);
+        const title = (options.title || '').trim() || this.inferTitleFromUrl(safeUrl);
+        const type = this.categoryToType(category);
+
+        const customVideos = this.getCustomVideos();
+        const alreadyExists = customVideos.some(video => video.url === safeUrl);
+        if (alreadyExists) {
+            return { success: false, message: 'This URL is already added.' };
+        }
+
+        customVideos.push({
+            id: `custom-${Date.now()}`,
+            url: safeUrl,
+            title,
+            category,
+            type,
+            custom: true
+        });
+
+        this.saveCustomVideos(customVideos);
+        this.mergeVideoCollections();
+        this.renderVideoGrid();
+        this.filterGrid(this.currentFilter || 'all');
+
+        return { success: true, message: 'Video added successfully.' };
+    }
+
+    removeCustomVideo(id) {
+        const filtered = this.getCustomVideos().filter(video => video.id !== id);
+        this.saveCustomVideos(filtered);
+        this.mergeVideoCollections();
+        this.renderVideoGrid();
+        this.filterGrid(this.currentFilter || 'all');
+    }
+
+    clearCustomVideos() {
+        this.saveCustomVideos([]);
+        this.mergeVideoCollections();
+        this.renderVideoGrid();
+        this.filterGrid(this.currentFilter || 'all');
+    }
+
+    addVideoFromForm() {
+        const urlInput = document.getElementById('videoUrlInput');
+        const titleInput = document.getElementById('videoTitleInput');
+        const categoryInput = document.getElementById('videoCategoryInput');
+        const msg = document.getElementById('videoUrlMsg');
+
+        if (!urlInput || !categoryInput || !msg) return;
+
+        const result = this.addVideoFromUrl(urlInput.value, {
+            title: titleInput ? titleInput.value : '',
+            category: categoryInput.value
+        });
+
+        if (result.success) {
+            msg.innerHTML = '<span style="color:#16a34a;">Video added. It will appear in this browser immediately.</span>';
+            urlInput.value = '';
+            if (titleInput) titleInput.value = '';
+        } else {
+            msg.innerHTML = `<span style="color:#dc2626;">${result.message}</span>`;
+        }
+    }
+
+    async setupVideoManager() {
+        const manager = document.getElementById('videoUrlManager');
+        if (!manager) return;
+
+        const params = new URLSearchParams(window.location.search);
+        const isAdminMode = params.get('admin') === '1';
+
+        if (!isAdminMode) {
+            return;
+        }
+
+        const apiBase = (window.CONFIG && window.CONFIG.apiBaseUrl) || '/api';
+        try {
+            const response = await fetch(`${apiBase}/auth/me`, { credentials: 'include' });
+            const data = await response.json();
+            if (!response.ok || !data.isAdmin) {
+                return;
+            }
+        } catch (error) {
+            console.warn('Admin session check failed', error);
+            return;
+        }
+
+        manager.hidden = false;
+
+        window.videoManager = {
+            add: (url, title = '', category = 'social-media') => this.addVideoFromUrl(url, { title, category }),
+            list: () => this.getCustomVideos(),
+            remove: (id) => this.removeCustomVideo(id),
+            clear: () => this.clearCustomVideos(),
+            quickAdd: () => {
+                const url = prompt('Enter direct video URL (.mp4/.webm/.mov/.m4v):');
+                if (!url) return;
+                const title = prompt('Optional title (leave empty for auto):') || '';
+                const category = prompt('Category: trading-reel / educational-video / social-media / motion-graphic', 'social-media') || 'social-media';
+                const result = this.addVideoFromUrl(url, { title, category });
+                alert(result.message);
+            }
+        };
     }
 
     hideLoadingSpinner() {
@@ -51,7 +251,7 @@ class VideoPortfolio {
             'sub vdo.mp4': 'https://res.cloudinary.com/dsuvhebce/video/upload/v1776180801/1_h2ouzq.mp4'
         };
 
-        this.videos = [
+        this.baseVideos = [
             { filename: 'trading (1).mp4', title: 'Candlestick Pattern', category: 'trading-reel', type: 'Trading Reel' },
             { filename: 'trading (2).mp4', title: 'Support and Resistance', category: 'trading-reel', type: 'Trading Reel' },
             { filename: 'trading (3).mp4', title: 'Forex Strategy', category: 'trading-reel', type: 'Trading Reel' },
@@ -64,6 +264,8 @@ class VideoPortfolio {
             { filename: 'motion graphic (3).mp4', title: 'Brand Animation', category: 'motion-graphic', type: 'Motion Graphics' },
             { filename: 'sub vdo.mp4', title: 'Social Media', category: 'social-media', type: 'Social Media' }
         ];
+
+        this.mergeVideoCollections();
     }
 
     renderVideoGrid() {
@@ -83,7 +285,7 @@ class VideoPortfolio {
         card.dataset.type = video.category;
         
         // Use Cloudinary URL if available, fallback to assets folder
-        const videoUrl = this.cloudinaryUrls[video.filename] || `assets/${video.filename}`;
+        const videoUrl = this.getVideoUrl(video);
         
         card.innerHTML = `
             <div class="thumb">
@@ -370,6 +572,8 @@ class VideoPortfolio {
     }
 
     filterGrid(type) {
+        this.currentFilter = type;
+
         // Update active filter button
         const filterButtons = document.querySelectorAll('.filter');
         filterButtons.forEach(button => {
