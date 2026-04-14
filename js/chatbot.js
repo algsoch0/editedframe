@@ -1,3 +1,69 @@
+const SYSTEM_CONTEXT = {
+    editor: {
+        name: 'Sachin Prajapati',
+        role: 'Video Editor',
+        title: 'Professional Video Editor & Content Creator',
+        email: 'connectwithsachin06@gmail.com',
+        phone: '9266141161',
+        github: 'https://github.com/sachinn122',
+        linkedin: 'https://www.linkedin.com/in/sachin-prajapati-20640a322/',
+        avatar: 'https://github.com/sachinn122.png',
+        bio: 'Sachin Prajapati is a 2nd year B.Tech student at NSUT, specializing in Mechanical Engineering (2024-2028). He runs edited.frame, creating high-quality video edits for Instagram Reels, YouTube Shorts, trading videos, educational content, and motion graphics.',
+        skills: ['Video Editing', 'Motion Graphics', 'Adobe Premiere Pro', 'After Effects', 'Color Grading', 'Social Media Content'],
+        turnaround: '48-72 hours',
+    },
+    developer: {
+        name: 'Vicky Kumar',
+        role: 'Developer',
+        email: 'npdimagine@gmail.com',
+        phone: '8383848219',
+        github: 'https://github.com/algsoch',
+        linkedin: 'https://linkedin.com/in/algsoch',
+        avatar: 'https://github.com/algsoch.png',
+        bio: 'Full-stack developer building edited.frame website and backend systems.',
+    },
+    services: [
+        'Instagram Reels',
+        'YouTube Shorts',
+        'Trading Videos',
+        'Educational Videos',
+        'Motion Graphics',
+        'Promo Videos',
+    ],
+    workflow: [
+        'You share raw clips and requirements',
+        'Quote and delivery timeline are provided',
+        'Work starts after confirmation',
+        'Final edits and revisions are delivered',
+    ],
+    portfolio: [
+        { title: 'Candlestick Pattern', category: 'trading-reel', label: 'Trading Reels', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265474/trading_1_yvgel4.mp4' },
+        { title: 'Support and Resistance', category: 'trading-reel', label: 'Trading Reels', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265498/trading_2_dzhim0.mp4' },
+        { title: 'Forex Strategy', category: 'trading-reel', label: 'Trading Reels', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265454/trading_3_qqffrq.mp4' },
+        { title: 'Leverage Basics', category: 'trading-reel', label: 'Trading Reels', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265483/trading_4_szfegp.mp4' },
+        { title: 'Investment Guide', category: 'educational-video', label: 'Educational Videos', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265286/educational_riaukp.mp4' },
+        { title: 'Risk Management', category: 'educational-video', label: 'Educational Videos', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265238/educational_2_b0eiey.mp4' },
+        { title: 'Logo Animation', category: 'motion-graphic', label: 'Motion Graphics', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265366/motion_graphic_1_cwknb2.mp4' },
+        { title: 'Data Visualization', category: 'motion-graphic', label: 'Motion Graphics', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265422/motion_graphic_2_uz78wz.mp4' },
+        { title: 'Brand Animation', category: 'motion-graphic', label: 'Motion Graphics', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1759265433/motion_graphic_3_yyotbn.mp4' },
+        { title: 'Social Media Edit', category: 'social-media', label: 'Social Media Edits', url: 'https://res.cloudinary.com/dsuvhebce/video/upload/v1776180801/1_h2ouzq.mp4' },
+    ],
+};
+
+const CATEGORY_KEYWORDS = [
+    { key: 'trading-reel', regex: /trading|forex|candlestick|stock|market/i },
+    { key: 'educational-video', regex: /education|educational|guide|tutorial/i },
+    { key: 'motion-graphic', regex: /motion|animation|graphics/i },
+    { key: 'social-media', regex: /social media|social|instagram|youtube|reel|short/i },
+];
+
+function detectLocalCategory(text) {
+    for (const entry of CATEGORY_KEYWORDS) {
+        if (entry.regex.test(text)) return entry.key;
+    }
+    return '';
+}
+
 class SalesChatbot {
     constructor() {
         this.apiBaseUrl = (window.CONFIG && window.CONFIG.apiBaseUrl) || '/api';
@@ -28,6 +94,7 @@ class SalesChatbot {
         this.setupOnboarding();
         this.renderQuickPrompts();
         this.bindEvents();
+        this.syncModeUI();
         this.addBotMessage('Hi! Ask about portfolio, pricing, or contact.');
     }
 
@@ -68,6 +135,7 @@ class SalesChatbot {
         this.nodes.modeSelect?.addEventListener('change', (event) => {
             this.mode = event.target.value;
             this.setStatus(`Mode: ${this.mode}`);
+            this.syncModeUI();
         });
 
         const clearBtn = document.getElementById('chatbotClear');
@@ -169,6 +237,18 @@ class SalesChatbot {
             panel.style.height = '100%';
             panel.style.zIndex = '11001';
             panel.style.borderRadius = '0';
+        }
+    }
+
+    syncModeUI() {
+        if (!this.nodes.wake) return;
+
+        const ruleMode = this.mode === 'rule';
+        this.nodes.wake.disabled = ruleMode;
+        this.nodes.wake.title = ruleMode ? 'Disabled in rule mode' : 'Wake Backend';
+        this.nodes.wake.setAttribute('aria-disabled', ruleMode ? 'true' : 'false');
+        if (ruleMode) {
+            this.setStatus('Mode: rule | Local only');
         }
     }
 
@@ -280,6 +360,14 @@ class SalesChatbot {
             return;
         }
 
+        if (this.mode === 'rule') {
+            const rule = this.buildLocalRuleResponse(text);
+            this.addBotMessage(rule.reply || 'I can help with portfolio, services, reviews, pricing, contact, or team details. Try one of those.');
+            this.applyLocalAction(rule.action, rule.data || {}, text);
+            this.setStatus('Mode: rule | Local only');
+            return;
+        }
+
         this.state.loading = true;
         this.setStatus('Thinking...');
 
@@ -309,6 +397,213 @@ class SalesChatbot {
         } finally {
             this.state.loading = false;
         }
+    }
+
+    buildLocalRuleResponse(message) {
+        const text = String(message || '').toLowerCase();
+        const category = detectLocalCategory(text);
+        const filteredVideos = category
+            ? SYSTEM_CONTEXT.portfolio.filter((item) => item.category === category)
+            : SYSTEM_CONTEXT.portfolio;
+        const reviews = this.getLocalReviews();
+        const reviewSummary = this.getLocalReviewSummary(reviews);
+        const isPortfolioIntent = Boolean(category) || /video|videos|work|portfolio|sample|samples|show video|show work|show portfolio|category|example|examples|demo|project|projects|show .*edits?|sample .*edits?|all .*videos?/i.test(text);
+
+        if (isPortfolioIntent && !/review|testimonial|feedback|client/i.test(text)) {
+            return {
+                reply: category
+                    ? `Showcasing ${filteredVideos.length} premium ${filteredVideos[0]?.label || 'portfolio'} samples. Each demonstrates Sachin's attention to detail, pacing, and visual impact.`
+                    : 'Featured portfolio across all categories: Trading Reels (market education), Educational Videos (tutorials), Motion Graphics (brand animations), and Social Media Edits. Browse and get inspired.',
+                action: 'show_portfolio',
+                data: {
+                    categories: ['trading-reel', 'educational-video', 'social-media', 'motion-graphic'],
+                    videos: filteredVideos.length ? filteredVideos : SYSTEM_CONTEXT.portfolio,
+                    selectedCategory: category || 'all',
+                },
+            };
+        }
+
+        if (/developer|who developed|who made|who built|about developer|vicky/i.test(text)) {
+            return {
+                reply: `${SYSTEM_CONTEXT.developer.name} (algsoch) is a full-stack developer who built and maintains edited.frame's entire tech stack-the website, backend chatbot API, and MongoDB systems. He's the technical backbone. ${SYSTEM_CONTEXT.editor.name} is the creative owner running the video editing business. ☎️ Vicky: ${SYSTEM_CONTEXT.developer.phone}`,
+                action: 'show_editor',
+                data: {
+                    editor: SYSTEM_CONTEXT.editor,
+                    developer: SYSTEM_CONTEXT.developer,
+                },
+            };
+        }
+
+        if (/sachin|who is sachin|about sachin|about editor|editor details|owner/i.test(text)) {
+            return {
+                reply: `${SYSTEM_CONTEXT.editor.name} is an accomplished ${SYSTEM_CONTEXT.editor.role} and 2nd year B.Tech student at NSUT (Mechanical Engineering, 2024-2028). Founder of edited.frame, he specializes in high-impact video content for Instagram Reels, YouTube Shorts, trading analysis, educational content, and motion graphics. Delivers premium quality within ${SYSTEM_CONTEXT.editor.turnaround} turnaround. Trusted by multiple clients. ☎️ ${SYSTEM_CONTEXT.editor.phone} | 📧 ${SYSTEM_CONTEXT.editor.email}`,
+                action: 'show_profile',
+                data: {
+                    profile: SYSTEM_CONTEXT.editor,
+                },
+            };
+        }
+
+        if (/review|testimonial|feedback|client/i.test(text)) {
+            const ratingText = reviewSummary.averageRating >= 4.5 ? '⭐ Exceptional' : reviewSummary.averageRating >= 4 ? '⭐⭐ Outstanding' : '⭐⭐⭐ Great';
+            return {
+                reply: `Clients trust Sachin's work. ${reviewSummary.approved} verified reviews with ${ratingText} ratings (${reviewSummary.averageRating.toFixed(1)}/5). Check out what recent clients are saying.`,
+                action: 'show_reviews',
+                data: {
+                    reviews,
+                },
+            };
+        }
+
+        if (/service|what do you do|offer|edit/i.test(text)) {
+            return {
+                reply: `Sachin specializes in creating scroll-stopping content: ${SYSTEM_CONTEXT.services.join(', ')}. Each project gets personalized attention to match your brand voice and platform requirements. What type of video are you thinking?`,
+                action: 'show_services',
+                data: {
+                    services: SYSTEM_CONTEXT.services,
+                },
+            };
+        }
+
+        if (/contact|email|call|phone|reach|send/i.test(text)) {
+            return {
+                reply: `Direct contact options: 📱 Call/WhatsApp ☎️ ${SYSTEM_CONTEXT.editor.phone} | 📧 Email: ${SYSTEM_CONTEXT.editor.email} | Or use this chat to send your requirement and Sachin will connect within 24 hours.`,
+                action: 'send_inquiry',
+                data: {
+                    email: SYSTEM_CONTEXT.editor.email,
+                },
+            };
+        }
+
+        if (/price|cost|budget|charge|rate/i.test(text)) {
+            return {
+                reply: `Pricing is flexible & scales with your needs: Video type (Reels, Shorts, Trading, Educational, Motion Graphics), Duration (30s-5min+), Complexity (simple cuts to advanced animations), Turnaround (standard 72h or express 24-48h), and Revisions included. Message ☎️ ${SYSTEM_CONTEXT.editor.phone} or send requirement now-Sachin quotes custom rates within 2 hours.`,
+                action: 'send_inquiry',
+            };
+        }
+
+        if (/workflow|process|how it works|delivery/i.test(text)) {
+            return {
+                reply: `Simple & transparent process: 1️⃣ ${SYSTEM_CONTEXT.workflow[0]} → 2️⃣ ${SYSTEM_CONTEXT.workflow[1]} → 3️⃣ ${SYSTEM_CONTEXT.workflow[2]} → 4️⃣ ${SYSTEM_CONTEXT.workflow[3]} → 5️⃣ Ready to launch. Sachin keeps you updated at every milestone. ${SYSTEM_CONTEXT.editor.turnaround} average delivery.`,
+                action: 'show_workflow',
+                data: {
+                    workflow: SYSTEM_CONTEXT.workflow,
+                },
+            };
+        }
+
+        return {
+            reply: `I can assist with: 🎬 Viewing Sachin's portfolio, 📋 Services & expertise, 💬 Client reviews, 💰 Pricing insights, 👤 About Sachin & Vicky, 📧 Direct contact, or 🚀 Sending your project brief. What interests you?`,
+            action: 'none',
+        };
+    }
+
+    applyLocalAction(action, data, userMessage) {
+        const lower = String(userMessage || '').toLowerCase();
+
+        if (action === 'show_services') {
+            if (Array.isArray(data.services) && data.services.length) {
+                const list = data.services.map((item) => `<li>${this.escapeHtml(item)}</li>`).join('');
+                this.addBotCard('Services', `<ul class="chatbot-list">${list}</ul>`, data.services.join(', '));
+            }
+            return;
+        }
+
+        if (action === 'show_reviews') {
+            if (Array.isArray(data.reviews) && data.reviews.length) {
+                const cards = data.reviews.map((item) => {
+                    const stars = '★'.repeat(Math.max(1, Number(item.rating) || 0));
+                    return `<article class="chatbot-inline-card"><h6>${this.escapeHtml(item.reviewerName)} • ${this.escapeHtml(item.projectType)}</h6><p>${this.escapeHtml(stars)}</p><p>${this.escapeHtml(item.reviewText)}</p></article>`;
+                }).join('');
+                this.addBotCard('Recent Client Reviews', cards, JSON.stringify(data.reviews));
+            }
+            return;
+        }
+
+        if (action === 'show_developer') {
+            const body = this.buildPersonCardHtml(data.developer || SYSTEM_CONTEXT.developer, 'Developer');
+            this.addBotCard('Developer Details', body, JSON.stringify(data.developer || SYSTEM_CONTEXT.developer));
+            return;
+        }
+
+        if (action === 'show_profile') {
+            const profile = data.profile || SYSTEM_CONTEXT.editor;
+            const body = this.buildProfileDetailHtml(profile);
+            this.addBotCard(`${profile.name || 'Profile'} - ${profile.role || 'Role'}`, body, JSON.stringify(profile));
+            return;
+        }
+
+        if (action === 'show_editor' || action === 'show_about') {
+            const editor = data.editor || SYSTEM_CONTEXT.editor;
+            const developer = data.developer || SYSTEM_CONTEXT.developer;
+            const editorCard = this.buildPersonCardHtml(editor, 'Editor');
+            const developerCard = this.buildPersonCardHtml(developer, 'Developer');
+            this.addBotCard('Team Details', `${editorCard}${developerCard}`, JSON.stringify({ editor, developer }));
+            return;
+        }
+
+        if (action === 'show_workflow') {
+            const steps = Array.isArray(data.workflow) ? data.workflow : SYSTEM_CONTEXT.workflow;
+            const list = steps.map((step, index) => `<li>${index + 1}. ${this.escapeHtml(step)}</li>`).join('');
+            this.addBotCard('Workflow', `<ol class="chatbot-list">${list}</ol>`, steps.join(' | '));
+            return;
+        }
+
+        if (action === 'send_inquiry') {
+            this.startInquiryFlow(data.email || SYSTEM_CONTEXT.editor.email, false);
+            return;
+        }
+
+        if (action === 'show_portfolio') {
+            const category = detectLocalCategory(lower);
+            const videos = Array.isArray(data.videos) && data.videos.length ? data.videos : SYSTEM_CONTEXT.portfolio;
+            const cards = videos.map((item, index) => {
+                const categoryBtn = item.category
+                    ? `<button type="button" class="chatbot-filter-btn" data-category="${this.escapeHtml(item.category)}">Filter ${this.escapeHtml(item.label || '')}</button>`
+                    : '';
+                return `
+                    <article class="chatbot-inline-card">
+                        <h6>${index + 1}. ${this.escapeHtml(item.title || 'Video')}</h6>
+                        <p>${this.escapeHtml(item.label || 'Portfolio')}</p>
+                        <p><a href="${this.escapeHtml(item.url || '#')}" target="_blank" rel="noopener noreferrer">Open Video</a></p>
+                        ${categoryBtn}
+                    </article>
+                `;
+            }).join('');
+
+            const headline = category
+                ? `Showing ${videos.length} ${this.categoryLabel(category)} samples.`
+                : 'Featured portfolio across all categories.';
+
+            this.addBotCard('Video Matches', `<p>${this.escapeHtml(headline)}</p>${cards}`, JSON.stringify(videos));
+        }
+    }
+
+    getLocalReviews() {
+        const reviewSystem = window.reviewSystem;
+        if (Array.isArray(reviewSystem?.publicReviews) && reviewSystem.publicReviews.length) {
+            return reviewSystem.publicReviews.slice(0, 5);
+        }
+
+        if (Array.isArray(reviewSystem?.fallbackReviews) && reviewSystem.fallbackReviews.length) {
+            return reviewSystem.fallbackReviews.slice(0, 5);
+        }
+
+        return [];
+    }
+
+    getLocalReviewSummary(reviews) {
+        const approved = Array.isArray(reviews)
+            ? reviews.filter((review) => review.status === 'approved' && review.allowDisplay !== false)
+            : [];
+        const averageRating = approved.length > 0
+            ? approved.reduce((sum, review) => sum + (Number(review.rating) || 0), 0) / approved.length
+            : 0;
+
+        return {
+            approved: approved.length,
+            averageRating,
+        };
     }
 
     async wakeBackend() {
@@ -436,8 +731,8 @@ class SalesChatbot {
         }
     }
 
-    startInquiryFlow(email) {
-        this.inquiryFlow = { active: true, step: 'name', payload: { emailTo: email } };
+    startInquiryFlow(email, useBackend = true) {
+        this.inquiryFlow = { active: true, step: 'name', payload: { emailTo: email }, useBackend };
         this.addBotMessage('Great. I will send this directly to Sachin. Please enter your name.');
     }
 
@@ -468,8 +763,34 @@ class SalesChatbot {
 
         if (this.inquiryFlow.step === 'requirement') {
             this.inquiryFlow.payload.requirement = value;
-            await this.submitInquiry();
+            if (this.inquiryFlow.useBackend === false) {
+                this.submitInquiryLocal();
+            } else {
+                await this.submitInquiry();
+            }
         }
+    }
+
+    submitInquiryLocal() {
+        const payload = this.inquiryFlow.payload;
+        const subject = `New Project Inquiry from ${payload.name || 'Website Chatbot'}`;
+        const body = [
+            `Name: ${payload.name || 'Not provided'}`,
+            `Email: ${payload.email || 'Not provided'}`,
+            `Budget: ${payload.budget || 'Not specified'}`,
+            '',
+            `Requirement:`,
+            payload.requirement || 'Not provided',
+        ].join('\n');
+
+        this.addBotCard(
+            'Inquiry Ready',
+            `<p>Your brief is ready. Open your email app or copy the summary below.</p><p><strong>To:</strong> ${this.escapeHtml(payload.emailTo || SYSTEM_CONTEXT.editor.email)}</p><p><strong>Subject:</strong> ${this.escapeHtml(subject)}</p><p><strong>Body:</strong></p><pre class="chatbot-copy-pre">${this.escapeHtml(body)}</pre>`,
+            `${subject}\n\n${body}`
+        );
+        this.openEmailDraft(subject, body);
+        this.setStatus('Inquiry prepared locally');
+        this.inquiryFlow = { active: false, step: '', payload: {}, useBackend: true };
     }
 
     async submitInquiry() {
