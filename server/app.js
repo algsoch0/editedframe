@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 4000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const SESSION_SECRET = process.env.SESSION_SECRET || 'change-me-now';
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:8000';
+const IS_CLOUD_DEPLOY = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
 
 if (!MONGODB_URI) {
   console.error('Missing MONGODB_URI in environment variables');
@@ -38,8 +39,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: IS_CLOUD_DEPLOY,
+      sameSite: IS_CLOUD_DEPLOY ? 'none' : 'lax',
       maxAge: 1000 * 60 * 60 * 8,
     },
     store: MongoStore.create({

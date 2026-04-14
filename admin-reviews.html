@@ -582,6 +582,12 @@ async function loginAdmin() {
             method: 'POST',
             body: JSON.stringify({ username, password }),
         });
+
+        const me = await admin.api('/auth/me');
+        if (!me.isAdmin) {
+            throw new Error('Login succeeded but session cookie was blocked. Use https://editedframe.onrender.com/admin-reviews.html or allow third-party cookies for this site.');
+        }
+
         document.getElementById('loginError').textContent = '';
         await checkSession();
     } catch (error) {
