@@ -60,7 +60,7 @@ const CATEGORY_KEYWORDS = [
   { key: 'trading-reel', regex: /trading|forex|candlestick|stock|market/i },
   { key: 'educational-video', regex: /education|educational|guide|tutorial/i },
   { key: 'motion-graphic', regex: /motion|animation|graphics/i },
-  { key: 'social-media', regex: /social|reel|short|instagram|youtube/i },
+  { key: 'social-media', regex: /social media|social|instagram|youtube|reel|short/i },
 ];
 
 function detectCategory(text) {
@@ -76,6 +76,23 @@ function buildRuleResponse(message, reviewSummary, recentReviews) {
   const filteredVideos = category
     ? SYSTEM_CONTEXT.portfolio.filter((item) => item.category === category)
     : SYSTEM_CONTEXT.portfolio;
+
+  const isPortfolioIntent = Boolean(category) || /video|videos|work|portfolio|sample|samples|show video|show work|show portfolio|category|example|examples|demo|project|projects|show .*edits?|sample .*edits?|all .*videos?/i.test(text);
+
+  // CHECK PORTFOLIO/VIDEO KEYWORDS FIRST (before profile/sachin/service keywords)
+  if (isPortfolioIntent && !/review|testimonial|feedback|client/i.test(text)) {
+    return {
+      reply: category
+        ? `Showcasing ${filteredVideos.length} premium ${filteredVideos[0]?.label || 'portfolio'} samples. Each demonstrates Sachin's attention to detail, pacing, and visual impact.`
+        : 'Featured portfolio across all categories: Trading Reels (market education), Educational Videos (tutorials), Motion Graphics (brand animations), and Social Media Edits. Browse and get inspired.',
+      action: 'show_portfolio',
+      data: {
+        categories: ['trading-reel', 'educational-video', 'social-media', 'motion-graphic'],
+        videos: filteredVideos.length ? filteredVideos : SYSTEM_CONTEXT.portfolio,
+        selectedCategory: category || 'all',
+      },
+    };
+  }
 
   if (/developer|who developed|who made|who built|about developer|vicky/i.test(text)) {
     return {
@@ -115,20 +132,6 @@ function buildRuleResponse(message, reviewSummary, recentReviews) {
       action: 'show_services',
       data: {
         services: SYSTEM_CONTEXT.services,
-      },
-    };
-  }
-
-  if (/video|work|portfolio|sample|show video|show work|show portfolio|category/i.test(text)) {
-    return {
-      reply: category
-        ? `Showcasing ${filteredVideos.length} premium ${filteredVideos[0]?.label || 'portfolio'} samples. Each demonstrates Sachin's attention to detail, pacing, and visual impact.`
-        : 'Featured portfolio across all categories: Trading Reels (market education), Educational Videos (tutorials), Motion Graphics (brand animations), and Social Media Edits. Browse and get inspired.',
-      action: 'show_portfolio',
-      data: {
-        categories: ['trading-reel', 'educational-video', 'social-media', 'motion-graphic'],
-        videos: filteredVideos.slice(0, 8),
-        selectedCategory: category || 'all',
       },
     };
   }

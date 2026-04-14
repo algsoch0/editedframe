@@ -8,6 +8,9 @@ class SalesChatbot {
         this.nodes = {};
         this.quickPrompts = [
             'Show trading videos',
+            'Show educational videos',
+            'Show motion graphics',
+            'Show social media edits',
             'What services do you offer?',
             'Show client reviews',
             'About Video Editor Sachin',
@@ -25,7 +28,7 @@ class SalesChatbot {
         this.setupOnboarding();
         this.renderQuickPrompts();
         this.bindEvents();
-        this.addBotMessage('Hi! I am your video editing assistant. Ask me about services, portfolio samples, reviews, pricing, or contact.');
+        this.addBotMessage('Hi! Ask about portfolio, pricing, or contact.');
     }
 
     cacheNodes() {
