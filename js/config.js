@@ -29,5 +29,7 @@ window.CONFIG = {
     discord: {
         enabled: false, // Disable for client-side security
         webhookUrl: '' // Never expose webhook URLs client-side
-    }
+    },
+
+    chatbotMode: 'rule' // switch to 'llm' later to use backend Groq-powered replies
 };

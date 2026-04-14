@@ -2,20 +2,17 @@ require('dotenv').config({ path: require('path').join(__dirname, '.env') });
 
 const express = require('express');
 const cors = require('cors');
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/auth');
 const reviewRoutes = require('./routes/reviews');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
 
 const PORT = process.env.PORT || 4000;
 const MONGODB_URI = process.env.MONGODB_URI;
-const SESSION_SECRET = process.env.SESSION_SECRET || 'change-me-now';
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:8000';
-const IS_CLOUD_DEPLOY = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
 
 if (!MONGODB_URI) {
   console.error('Missing MONGODB_URI in environment variables');
@@ -28,25 +25,6 @@ app.use(
   cors({
     origin: CLIENT_ORIGIN.split(',').map((v) => v.trim()),
     credentials: true,
-  })
-);
-
-app.use(
-  session({
-    name: 'editedframe.sid',
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: IS_CLOUD_DEPLOY,
-      sameSite: IS_CLOUD_DEPLOY ? 'none' : 'lax',
-      maxAge: 1000 * 60 * 60 * 8,
-    },
-    store: MongoStore.create({
-      mongoUrl: MONGODB_URI,
-      collectionName: 'sessions',
-    }),
   })
 );
 
@@ -74,6 +52,7 @@ app.get('/api/health', (_req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.use((err, _req, res, _next) => {
   console.error('Server error:', err);

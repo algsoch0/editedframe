@@ -516,6 +516,52 @@ https://res.cloudinary.com/dsuvhebce/video/upload/v1759265433/motion_graphic_3_y
     </div>
   </div>
 
+  <div id="salesChatbot" class="sales-chatbot" aria-live="polite">
+    <button id="chatbotToggle" class="chatbot-toggle" type="button" aria-label="Open chat assistant">
+      <span>Chat with Assistant</span>
+    </button>
+
+    <section id="chatbotPanel" class="chatbot-panel" aria-label="Sales chatbot">
+      <header class="chatbot-header">
+        <div class="chatbot-header-main">
+          <img src="assets/logo.jpg" alt="edited.frame chatbot logo" class="chatbot-logo">
+          <div>
+          <h4>edited.frame Assistant</h4>
+          <p>Smart help for services, reviews, and portfolio.</p>
+          </div>
+        </div>
+        <div class="chatbot-header-actions">
+          <button id="chatbotWake" class="chatbot-mini-btn" type="button" title="Wake Backend">Wake</button>
+          <select id="chatbotModeSelect" class="chatbot-mode-select" aria-label="Chat mode" title="Switch chat mode">
+            <option value="rule">Rule</option>
+            <option value="llm">AI</option>
+          </select>
+          <button id="chatbotClear" class="chatbot-mini-btn" type="button" title="Clear chat">Clear</button>
+          <button id="chatbotFullscreen" class="chatbot-mini-btn" type="button" title="Fullscreen">⛶</button>
+          <button id="chatbotClose" class="chatbot-close" type="button" aria-label="Close chat">✕</button>
+        </div>
+      </header>
+
+      <div id="chatbotQuickPrompts" class="chatbot-quick-prompts"></div>
+      <div class="chatbot-onboarding" id="chatbotOnboarding">
+        <span class="chatbot-onboarding-item">🎬 Professional Video Editing</span>
+        <span class="chatbot-onboarding-item">🔥 Viral Social Reels</span>
+        <span class="chatbot-onboarding-item">📖 Visual Storytelling</span>
+        <span class="chatbot-onboarding-item">⚡ Lightning-Fast Turnaround</span>
+      </div>
+      <div id="chatbotMessages" class="chatbot-messages"></div>
+      <div id="chatbotStatus" class="chatbot-status">Mode: rule</div>
+
+      <form id="chatbotForm" class="chatbot-form">
+        <select id="chatbotPromptSelect" class="chatbot-prompt-select" aria-label="Quick chatbot prompts">
+          <option value="">Quick ask: choose a topic...</option>
+        </select>
+        <input id="chatbotInput" type="text" placeholder="Ask about videos, pricing, reviews, or contact..." autocomplete="off" required>
+        <button type="submit" class="btn primary">Send</button>
+      </form>
+    </section>
+  </div>
+
   <script src="js/main.js"></script>
   
   <!-- Configuration -->
@@ -523,6 +569,7 @@ https://res.cloudinary.com/dsuvhebce/video/upload/v1759265433/motion_graphic_3_y
   
   <!-- Local Storage Review System (No Firebase needed!) -->
   <script src="js/reviews-localstorage.js"></script>
+  <script src="js/chatbot.js"></script>
   
   <script>
     // Additional performance optimization

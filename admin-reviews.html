@@ -259,8 +259,23 @@
 class ReviewAdmin {
     constructor() {
         this.apiBaseUrl = (window.CONFIG && window.CONFIG.apiBaseUrl) || '/api';
+        this.tokenStorageKey = 'editedframe_admin_token_v1';
         this.currentFilter = 'all';
         this.reviews = [];
+    }
+
+    getToken() {
+        return localStorage.getItem(this.tokenStorageKey) || '';
+    }
+
+    setToken(token) {
+        if (token) {
+            localStorage.setItem(this.tokenStorageKey, token);
+        }
+    }
+
+    clearToken() {
+        localStorage.removeItem(this.tokenStorageKey);
     }
 
     setDbStatus(type, message) {
@@ -273,7 +288,7 @@ class ReviewAdmin {
     async updateDbStatus() {
         this.setDbStatus('checking', 'Status: Checking...');
         try {
-            const res = await fetch(`${this.apiBaseUrl}/health`, { credentials: 'include' });
+            const res = await fetch(`${this.apiBaseUrl}/health`);
             const data = await res.json().catch(() => ({}));
             if (res.ok && data.database && data.database.connected) {
                 this.setDbStatus('connected', 'Status: Backend online, DB connected');
@@ -289,9 +304,14 @@ class ReviewAdmin {
 
     async api(path, options = {}) {
         try {
+            const token = this.getToken();
+            const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
             const res = await fetch(`${this.apiBaseUrl}${path}`, {
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...authHeaders,
+                    ...(options.headers || {}),
+                },
                 ...options,
             });
             const data = await res.json().catch(() => ({}));
@@ -559,6 +579,9 @@ function clearAdminVideos() {
 async function checkSession() {
     await admin.updateDbStatus();
     try {
+        if (!admin.getToken()) {
+            throw new Error('Not admin');
+        }
         const me = await admin.api('/auth/me');
         if (!me.isAdmin) {
             throw new Error('Not admin');
@@ -578,14 +601,20 @@ async function loginAdmin() {
     const password = document.getElementById('adminPassword').value;
 
     try {
-        await admin.api('/auth/login', {
+        const loginResult = await admin.api('/auth/login', {
             method: 'POST',
             body: JSON.stringify({ username, password }),
         });
 
+        if (!loginResult.token) {
+            throw new Error('Token not received from server');
+        }
+
+        admin.setToken(loginResult.token);
+
         const me = await admin.api('/auth/me');
         if (!me.isAdmin) {
-            throw new Error('Login succeeded but session cookie was blocked. Use https://editedframe.onrender.com/admin-reviews.html or allow third-party cookies for this site.');
+            throw new Error('Login succeeded but admin token validation failed. Please refresh and login again.');
         }
 
         document.getElementById('loginError').textContent = '';
@@ -598,6 +627,7 @@ async function loginAdmin() {
 
 async function logoutAdmin() {
     await admin.api('/auth/logout', { method: 'POST' });
+    admin.clearToken();
     await checkSession();
 }
 
