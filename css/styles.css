@@ -6203,7 +6203,89 @@ footer::before{
   font-weight: 700;
 }
 
+@media (max-width: 768px) {
+  .footer-content-simple {
+    grid-template-columns: 1fr;
+    padding: 24px 16px;
+    gap: 18px;
+  }
+
+  .footer-people {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .footer-summary {
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-person-card {
+    padding: 13px;
+    gap: 5px;
+  }
+
+  .footer-person-card p:last-of-type {
+    display: none;
+  }
+
+  .footer-person-card a {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 480px) {
+  .footer-content-simple {
+    padding: 20px 14px;
+    gap: 16px;
+  }
+
+  .footer-people {
+    gap: 10px;
+  }
+
+  .footer-person-card {
+    padding: 12px;
+    gap: 5px;
+    font-size: 0.8rem;
+  }
+
+  .footer-person-card h5 {
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-person-card .person-name {
+    font-size: 0.95rem;
+    line-height: 1.15;
+  }
+
+  .footer-person-card p {
+    line-height: 1.35;
+  }
+
+  .owner-avatar,
+  .developer-avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .role-tags {
+    gap: 5px;
+  }
+
+  .role-tag {
+    font-size: 0.62rem;
+    padding: 3px 7px;
+  }
+
+  .footer-person-card a {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+    line-height: 1.25;
+  }
+
   .footer-content-simple {
     grid-template-columns: 1fr;
     text-align: center;
@@ -6233,5 +6315,4 @@ footer::before{
     flex-wrap: wrap;
     justify-content: center;
   }
-}
 }

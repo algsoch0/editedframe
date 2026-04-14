@@ -2402,6 +2402,66 @@
       border:2px solid rgba(123,47,242,0.25);
       margin-bottom:4px;
     }
+
+    @media (max-width: 768px) {
+      .footer-people-section {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .footer-profile-card {
+        padding: 12px;
+        gap: 5px;
+      }
+
+      .footer-profile-card .person-name {
+        font-size: 15px;
+        line-height: 1.15;
+      }
+
+      .footer-profile-card p:last-of-type {
+        display: none;
+      }
+
+      .footer-profile-card a {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .footer-profile-card .developer-avatar{
+        width:48px;
+        height:48px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .footer-people-section {
+        gap: 10px;
+      }
+
+      .footer-profile-card {
+        padding: 11px;
+        font-size: 12px;
+      }
+
+      .footer-profile-card .person-role {
+        font-size: 10px;
+      }
+
+      .role-tags {
+        gap: 5px;
+      }
+
+      .role-tag {
+        font-size: 9px;
+        padding: 3px 6px;
+      }
+
+      .footer-profile-card .developer-avatar{
+        width:44px;
+        height:44px;
+      }
+    }
     
     .footer-bottom{
       position:relative;
