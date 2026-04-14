@@ -271,31 +271,41 @@ class ReviewAdmin {
     }
 
     async updateDbStatus() {
-        this.setDbStatus('checking', 'DB: Checking...');
+        this.setDbStatus('checking', 'Status: Checking...');
         try {
             const res = await fetch(`${this.apiBaseUrl}/health`, { credentials: 'include' });
             const data = await res.json().catch(() => ({}));
-            if (res.ok && data.success) {
-                this.setDbStatus('connected', 'DB: Connected');
+            if (res.ok && data.database && data.database.connected) {
+                this.setDbStatus('connected', 'Status: Backend online, DB connected');
+            } else if (res.ok && data.database && !data.database.connected) {
+                this.setDbStatus('disconnected', 'Status: Backend online, DB disconnected');
             } else {
-                this.setDbStatus('disconnected', 'DB: Offline');
+                this.setDbStatus('disconnected', 'Status: Backend offline');
             }
         } catch (_) {
-            this.setDbStatus('disconnected', 'DB: Offline');
+            this.setDbStatus('disconnected', 'Status: Backend offline');
         }
     }
 
     async api(path, options = {}) {
-        const res = await fetch(`${this.apiBaseUrl}${path}`, {
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
-            ...options,
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) {
-            throw new Error(data.message || `Request failed (${res.status})`);
+        try {
+            const res = await fetch(`${this.apiBaseUrl}${path}`, {
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+                ...options,
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                throw new Error(data.message || `Request failed (${res.status})`);
+            }
+            return data;
+        } catch (error) {
+            const message = (error && error.message) ? error.message : '';
+            if (message.toLowerCase().includes('failed to fetch') || message.toLowerCase().includes('networkerror')) {
+                throw new Error('Backend is offline or API URL is wrong. Please check deployment and API base URL.');
+            }
+            throw error;
         }
-        return data;
     }
 
     async loadStats() {
@@ -575,7 +585,8 @@ async function loginAdmin() {
         document.getElementById('loginError').textContent = '';
         await checkSession();
     } catch (error) {
-        document.getElementById('loginError').textContent = error.message || 'Login failed';
+        const msg = (error && error.message) ? error.message : 'Login failed';
+        document.getElementById('loginError').textContent = msg;
     }
 }
 

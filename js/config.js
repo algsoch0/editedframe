@@ -4,7 +4,7 @@
 window.CONFIG = {
     apiBaseUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:4000/api'
-        : 'https://your-api-domain.com/api',
+        : 'https://editedframedatabase.onrender.com/api',
 
     // Firebase configuration - these are client-side safe values
     firebase: {

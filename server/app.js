@@ -50,7 +50,25 @@ app.use(
 );
 
 app.get('/api/health', (_req, res) => {
-  res.json({ success: true, message: 'API is healthy' });
+  const stateMap = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting',
+  };
+
+  const dbReadyState = mongoose.connection.readyState;
+  const dbConnected = dbReadyState === 1;
+
+  res.status(dbConnected ? 200 : 503).json({
+    success: dbConnected,
+    backend: 'online',
+    database: {
+      connected: dbConnected,
+      state: stateMap[dbReadyState] || 'unknown',
+    },
+    message: dbConnected ? 'Backend online and database connected' : 'Backend online but database disconnected',
+  });
 });
 
 app.use('/api/auth', authRoutes);
